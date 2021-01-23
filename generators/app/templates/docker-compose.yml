@@ -1,0 +1,57 @@
+version: "3.8"
+services: 
+  redis:
+    image: redis:alpine
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks: 
+      - backend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: 0.5
+          memory: 50M
+  db:
+    image: postgres:13-alpine
+    hostname: db
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    networks:
+      - backend
+    ports: 
+      - "5432:5432"
+    deploy:
+      placement:
+        max_replicas_per_node: 1
+        constraints:
+          - "node.role==manager"
+    environment: 
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+  # food_app:
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./
+  #   hostname: food_app
+  #   depends_on: 
+  #     - redis
+  #     - db
+  #   networks: 
+  #     - backend
+  #   ports:
+  #     - "8080:8080"
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver_opts: 
+      o: bind
+      device: <%= destinationPath %>/data/db/
+      type: bind
