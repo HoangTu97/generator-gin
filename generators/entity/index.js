@@ -51,9 +51,15 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    const entityLower = this.options.entityLower;
-    const entityCap = this.options.entityCap;
+    this._scafflodFiles();
+    this._registerController();
+    this._registerEntityDB();
+    this._registerRoutesPrivate();
+    this._registerRoutesPublic();
+    // this._registerSecurity();
+  }
 
+  _scafflodFiles() {
     this.fs.copyTpl(
       this.templatePath("controller/_temp.go"),
       this.destinationPath(`controller/${entityCap}.go`),
@@ -128,11 +134,6 @@ module.exports = class extends Generator {
       this.destinationPath(`dto/response/${entityLower}/ListResponseDTO.go`),
       this.options
     );
-    this._registerController();
-    this._registerEntityDB();
-    this._registerRoutesPrivate();
-    this._registerRoutesPublic();
-    // this._registerSecurity();
   }
 
   _registerController() {
