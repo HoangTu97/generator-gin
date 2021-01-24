@@ -15,13 +15,19 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'appName',
         message: 'Your project name?',
-        default: this.appname
+        default: this.config.get("appName") || this.appname
       },
       {
         type: 'input',
         name: 'appSecretKey',
         message: 'Your JWT secret key?',
         default: this.config.get("secretKey") || Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+      },
+      {
+        type: 'input',
+        name: 'serverPort',
+        message: 'Your server port?',
+        default: this.config.get("serverPort") || '8080'
       }
     ];
 
@@ -52,6 +58,7 @@ module.exports = class extends Generator {
     );
     this.config.set("appName", this.props.appName)
     this.config.set("secretKey", this.props.appSecretKey)
+    this.config.set("serverPort", this.props.serverPort)
     this.config.save();
   }
 };
