@@ -113,7 +113,7 @@ module.exports = class extends Generator {
     var file = this.fs.read(path);
 
     var controllerGlobalDeclare = `${entityCap}Controller controller.${entityCap}`;
-    var mapperDeclare = `${entityLower}Mapper := mapper.New${entityCap}()`;
+    var mapperDeclare = `${entityLower}Mapper := mapper_impl.New${entityCap}()`;
     var repositoryDeclare = `${entityLower}Repo := repository_impl.New${entityCap}(db)`;
     var repositoryProxyDeclare = `${entityLower}RepoProxy := repository_proxy.New${entityCap}(db)`;
     var serviceDeclare = `${entityLower}Service := service_impl.New${entityCap}(${entityLower}RepoProxy, ${entityLower}Mapper)`;

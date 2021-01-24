@@ -9,6 +9,7 @@ import (
   "<%= appName %>/service/impl"
   "<%= appName %>/service/proxy"
   "<%= appName %>/service/mapper"
+  "<%= appName %>/service/mapper/impl"
 
   "gorm.io/gorm"
 )
