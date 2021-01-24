@@ -84,6 +84,11 @@ module.exports = class extends Generator {
       this.options
     );
     this.fs.copyTpl(
+      this.templatePath("service/mapper/impl/_temp.go"),
+      this.destinationPath(`service/mapper/impl/${entityCap}.go`),
+      this.options
+    );
+    this.fs.copyTpl(
       this.templatePath("dto/request/_entity/CreateRequestDTO.go"),
       this.destinationPath(`dto/request/${entityLower}/CreateRequestDTO.go`),
       this.options
