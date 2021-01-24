@@ -7,6 +7,7 @@ import (
   "<%= appName %>/service"
 )
 
+// <%= entityLower %> use for async,...
 type <%= entityLower %> struct {
   service service.<%= entityCap %>
 }

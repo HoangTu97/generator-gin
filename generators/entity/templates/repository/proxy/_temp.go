@@ -7,6 +7,7 @@ import (
   "<%= appName %>/repository"
 )
 
+// <%= entityLower %> use for transaction,...
 type <%= entityLower %> struct {
   repository repository.<%= entityCap %>
 }
