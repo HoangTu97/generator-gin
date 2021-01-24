@@ -15,6 +15,27 @@ module.exports = class extends Generator {
     this.log(this.options.entity);
   }
 
+  prompting() {
+    const prompts = [
+      {
+        type: 'input',
+        name: 'useRepoProxy',
+        message: 'Use repository proxy ?',
+        default: false
+      },
+      {
+        type: 'input',
+        name: 'useServiceProxy',
+        message: 'Use service proxy ?',
+        default: false
+      }
+    ];
+
+    return this._optionOrPrompt(prompts).then(props => {
+      this.props = props;
+    });
+  }
+
   start() {
     this.options.entityLower = this.options.entity.toLowerCase();
     this.options.entityCap = this._capitalize(this.options.entity);
@@ -58,11 +79,13 @@ module.exports = class extends Generator {
       this.destinationPath(`repository/impl/${entityCap}.go`),
       this.options
     );
-    this.fs.copyTpl(
-      this.templatePath("repository/proxy/_temp.go"),
-      this.destinationPath(`repository/proxy/${entityCap}.go`),
-      this.options
-    );
+    if (this.props.useRepoProxy === true) {
+      this.fs.copyTpl(
+        this.templatePath("repository/proxy/_temp.go"),
+        this.destinationPath(`repository/proxy/${entityCap}.go`),
+        this.options
+      );
+    }
     this.fs.copyTpl(
       this.templatePath("service/_temp.go"),
       this.destinationPath(`service/${entityCap}.go`),
@@ -73,11 +96,13 @@ module.exports = class extends Generator {
       this.destinationPath(`service/impl/${entityCap}.go`),
       this.options
     );
-    this.fs.copyTpl(
-      this.templatePath("service/proxy/_temp.go"),
-      this.destinationPath(`service/proxy/${entityCap}.go`),
-      this.options
-    );
+    if (this.props.useServiceProxy === true) {
+      this.fs.copyTpl(
+        this.templatePath("service/proxy/_temp.go"),
+        this.destinationPath(`service/proxy/${entityCap}.go`),
+        this.options
+      );
+    }
     this.fs.copyTpl(
       this.templatePath("service/mapper/_temp.go"),
       this.destinationPath(`service/mapper/${entityCap}.go`),
@@ -107,7 +132,7 @@ module.exports = class extends Generator {
     this._registerEntityDB();
     this._registerRoutesPrivate();
     this._registerRoutesPublic();
-    this._registerSecurity();
+    // this._registerSecurity();
   }
 
   _registerController() {
@@ -118,19 +143,28 @@ module.exports = class extends Generator {
     var file = this.fs.read(path);
 
     var controllerGlobalDeclare = `${entityCap}Controller controller.${entityCap}`;
-    var mapperDeclare = `${entityLower}Mapper := mapper_impl.New${entityCap}()`;
-    var repositoryDeclare = `${entityLower}Repo := repository_impl.New${entityCap}(db)`;
-    var repositoryProxyDeclare = `${entityLower}RepoProxy := repository_proxy.New${entityCap}(db)`;
-    var serviceDeclare = `${entityLower}Service := service_impl.New${entityCap}(${entityLower}RepoProxy, ${entityLower}Mapper)`;
-    var serviceProxyDeclare = `${entityLower}ServiceProxy := service_proxy.New${entityCap}(${entityLower}Service)`;
-    var controllerDeclare = `${entityCap}Controller = controller.New${entityCap}(${entityLower}ServiceProxy)`;
-
     file = this._addControllerDeclareLine(file, '// Controllers globale declare end : dont remove', controllerGlobalDeclare)
+
+    var mapperDeclare = `${entityLower}Mapper := mapper_impl.New${entityCap}()`;
     file = this._addControllerDeclareLine(file, '// Mappers declare end : dont remove', mapperDeclare)
+
+    var repositoryDeclare = `${entityLower}Repo := repository_impl.New${entityCap}(db)`;
     file = this._addControllerDeclareLine(file, '// Repositories declare end : dont remove', repositoryDeclare)
-    file = this._addControllerDeclareLine(file, '// Proxy Repositories declare end : dont remove', repositoryDeclare)
+
+    if (this.props.useRepoProxy === true) {
+      var repositoryProxyDeclare = `${entityLower}RepoProxy := repository_proxy.New${entityCap}(db)`;
+      file = this._addControllerDeclareLine(file, '// Proxy Repositories declare end : dont remove', repositoryDeclare)
+    }
+
+    var serviceDeclare = `${entityLower}Service := service_impl.New${entityCap}(${entityLower}Repo${this.props.useRepoProxy === true ? 'Proxy' : ''}, ${entityLower}Mapper)`;
     file = this._addControllerDeclareLine(file, '// Services declare end : dont remove', serviceDeclare)
-    file = this._addControllerDeclareLine(file, '// Proxy Services declare end : dont remove', serviceProxyDeclare)
+
+    if (this.props.useServiceProxy === true) {
+      var serviceProxyDeclare = `${entityLower}ServiceProxy := service_proxy.New${entityCap}(${entityLower}Service)`;
+      file = this._addControllerDeclareLine(file, '// Proxy Services declare end : dont remove', serviceProxyDeclare)
+    }
+
+    var controllerDeclare = `${entityCap}Controller = controller.New${entityCap}(${entityLower}Service${this.props.useServiceProxy === true ? 'Proxy' : ''})`;
     file = this._addControllerDeclareLine(file, '// Controllers declare end : dont remove', controllerDeclare)
 
     this.fs.write(path, file);
