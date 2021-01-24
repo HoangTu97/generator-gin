@@ -3,6 +3,7 @@ package mapper
 import (
   "<%= appName %>/dto"
   "<%= appName %>/models"
+  "gorm.io/gorm"
 )
 
 type <%= entityCap %> interface {
@@ -20,19 +21,19 @@ func New<%= entityCap %>() <%= entityCap %> {
 
 func (m *<%= entityLower %>) ToDTO(entity models.<%= entityCap %>) dto.<%= entityCap %>DTO {
   return dto.<%= entityCap %>DTO{
-    ID:          entity.model.ID,
-    CreatedAt:   entity.model.CreatedAt,
-    UpdatedAt:   entity.model.UpdatedAt,
-    DeletedAt:   entity.model.DeletedAt,
+    ID:          entity.Model.ID,
+    CreatedAt:   entity.Model.CreatedAt,
+    UpdatedAt:   entity.Model.UpdatedAt,
   }
 }
 
 func (m *<%= entityLower %>) ToEntity(dto dto.<%= entityCap %>DTO) models.<%= entityCap %> {
   return models.<%= entityCap %>{
-    ID:          dto.ID,
-    CreatedAt:   dto.CreatedAt,
-    UpdatedAt:   dto.UpdatedAt,
-    DeletedAt:   dto.DeletedAt,
+    gorm.Model{
+      ID:          dto.ID,
+      CreatedAt:   dto.CreatedAt,
+      UpdatedAt:   dto.UpdatedAt,
+    },
   }
 }
 
