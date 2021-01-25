@@ -1,0 +1,17 @@
+package dto
+
+import (
+  "time"
+)
+
+// <%= entityClass %>DTO godoc
+type <%= entityClass %>DTO struct {
+  ID uint
+  CreatedAt time.Time
+  UpdatedAt time.Time
+  DeletedAt *time.Time
+
+  // Auto-gen fields<% fields.forEach(function(field){ %>
+  <%= field.name %> <%= field.type %> <% if (field.jsonConfig !== '') {%>`<%- field.jsonConfig %>`<%}%><% }); %>
+  // Auto-gen fields : dont remove
+}

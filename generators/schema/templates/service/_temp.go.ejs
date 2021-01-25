@@ -1,0 +1,14 @@
+package service
+
+import (
+  "<%= appName %>/dto"
+  "<%= appName %>/helpers/page"
+  "<%= appName %>/helpers/pagination"
+)
+
+type <%= entityClass %> interface {
+  Save(<%= entityVar %>DTO dto.<%= entityClass %>DTO) (dto.<%= entityClass %>DTO, bool)
+  FindOne(id uint) (dto.<%= entityClass %>DTO, bool)
+  FindPage(pageable pagination.Pageable) page.Page
+  Delete(id uint)
+}

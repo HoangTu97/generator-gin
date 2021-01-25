@@ -1,0 +1,14 @@
+package repository
+
+import (
+  "<%= appName %>/helpers/page"
+  "<%= appName %>/helpers/pagination"
+  "<%= appName %>/models"
+)
+
+type <%= entityClass %> interface {
+  Save(<%= entityVar %> models.<%= entityClass %>) (models.<%= entityClass %>, error)
+  FindOne(id uint) (models.<%= entityClass %>, error)
+  FindPage(pageable pagination.Pageable) page.Page
+  Delete(id uint)
+}

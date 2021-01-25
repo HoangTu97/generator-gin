@@ -1,0 +1,58 @@
+package mapper_impl
+
+import (
+  "<%= appName %>/dto"
+  "<%= appName %>/models"
+  "<%= appName %>/service/mapper"
+  "gorm.io/gorm"
+)
+
+type <%= entityVar %> struct {}
+
+func New<%= entityClass %>() mapper.<%= entityClass %> {
+  return &<%= entityVar %>{}
+}
+
+func (m *<%= entityVar %>) ToDTO(entity models.<%= entityClass %>) dto.<%= entityClass %>DTO {
+  return dto.<%= entityClass %>DTO{
+    ID:          entity.Model.ID,
+    CreatedAt:   entity.Model.CreatedAt,
+    UpdatedAt:   entity.Model.UpdatedAt,
+    // Auto-gen fields<% fields.forEach(function(field){ %>
+    <%= field.name %>: entity.<%= field.name %>,<% }); %>
+    // Auto-gen fields : dont remove
+  }
+}
+
+func (m *<%= entityVar %>) ToEntity(dto dto.<%= entityClass %>DTO) models.<%= entityClass %> {
+  return models.<%= entityClass %>{
+    Model: gorm.Model{
+      ID:          dto.ID,
+      CreatedAt:   dto.CreatedAt,
+      UpdatedAt:   dto.UpdatedAt,
+    },
+    // Auto-gen fields<% fields.forEach(function(field){ %>
+    <%= field.name %>: dto.<%= field.name %>,<% }); %>
+    // Auto-gen fields : dont remove
+  }
+}
+
+func (m *<%= entityVar %>) ToDTOS(entityList []models.<%= entityClass %>) []dto.<%= entityClass %>DTO {
+  dtos := make([]dto.<%= entityClass %>DTO, len(entityList))
+
+  for i, entity := range entityList {
+    dtos[i] = m.ToDTO(entity)
+  }
+
+  return dtos
+}
+
+func (m *<%= entityVar %>) ToEntities(dtoList []dto.<%= entityClass %>DTO) []models.<%= entityClass %> {
+  entities := make([]models.<%= entityClass %>, len(dtoList))
+
+  for i, dto := range dtoList {
+    entities[i] = m.ToEntity(dto)
+  }
+
+  return entities
+}

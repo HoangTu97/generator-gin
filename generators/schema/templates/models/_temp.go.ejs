@@ -1,0 +1,37 @@
+package models
+
+import (
+  "gorm.io/gorm"
+)
+
+// <%= entityClass %> entity
+type <%= entityClass %> struct {
+  gorm.Model
+
+  // Auto-gen fields<% fields.forEach(function(field){ %>
+  <%= field.name %> <%= field.type %><% if (field.gormConfig !== '') {%> `<%- field.gormConfig %>`<%}%><% }); %>
+  // Auto-gen fields : dont remove
+<% if (relationships !== undefined) { %>
+  // Auto-gen relationships<% for (const [to, config] of Object.entries(relationships)) 
+  {
+    var texxt;
+    switch (config.type) {
+      case 'belongsTo':
+        texxt = `
+  ${to}ID uint
+  ${to} ${to}`;
+        break;
+      case 'hasMany':
+        texxt = `
+  ${to}s []${to}`;
+        break;
+      case 'manyToMany':
+        texxt = `
+  ${to}s []${to} \`gorm:"many2many:${config.joinTable};"\``;
+          break;
+    } 
+    %><%- texxt %><%
+  } %>
+  // Auto-gen relationships : dont remove<%
+} %>
+}
