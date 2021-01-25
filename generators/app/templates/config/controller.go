@@ -8,7 +8,6 @@ import (
   "<%= appName %>/repository/proxy"
   "<%= appName %>/service/impl"
   "<%= appName %>/service/proxy"
-  "<%= appName %>/service/mapper"
   "<%= appName %>/service/mapper/impl"
 
   "gorm.io/gorm"
@@ -27,7 +26,7 @@ func SetupController(
   cache cache.Cache,
 ) {
   // Mappers declare
-  userMapper := mapper.NewUser()
+  userMapper := mapper_impl.NewUser()
   // Mappers declare end : dont remove
 
   // Repositories declare
