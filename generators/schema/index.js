@@ -120,7 +120,6 @@ module.exports = class extends Generator {
   writing() {
     for (let index = 0; index < this.options.config.models.length; ++index) {
       var model = this.options.config.models[index];
-      this.log(model);
 
       this._scafflodFiles(model.nameVar, model.nameClass, this.options.useRepoProxy, this.options.useServiceProxy, model.fields, model.relationships);
       this._registerController(model.nameVar, model.nameClass, this.options.useRepoProxy, this.options.useServiceProxy);
