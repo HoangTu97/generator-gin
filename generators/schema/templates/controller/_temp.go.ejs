@@ -83,10 +83,8 @@ func (r *<%= entityVar %>) Create(c *gin.Context) {
     return
   }
 
-  <%= entityVar %>DTO := dto.<%= entityClass %>DTO{
-    // Auto-gen fields<% fields.forEach(function(field){ %>
+  <%= entityVar %>DTO := dto.<%= entityClass %>DTO{<% fields.forEach(function(field){ %>
     <%= field.name %>: requestDTO.<%= field.name %>,<% }); %>
-    // Auto-gen fields : dont remove
   }
 
   _, success = r.service.Save(<%= entityVar %>DTO)
@@ -123,10 +121,8 @@ func (r *<%= entityVar %>) Update(c *gin.Context) {
     response.CreateErrorResponse(c, constants.ErrorStringApi.INTERNAL_ERROR)
     return
   }
-
-  // Auto-gen fields<% fields.forEach(function(field){ %>
+<% fields.forEach(function(field){ %>
   <%= entityVar %>DTO.<%= field.name %> = requestDTO.<%= field.name %><% }); %>
-  // Auto-gen fields : dont remove
 
   _, success = r.service.Save(<%= entityVar %>DTO)
   if !success {

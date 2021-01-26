@@ -14,9 +14,8 @@ type ListResponseDTO struct {
 // ListItemResponseDTO godoc
 type ListItemResponseDTO struct {
   ID uint `json:"id"`
-  // Auto-gen fields<% fields.forEach(function(field){ %>
+<% fields.forEach(function(field){ %>
   <%= field.name %> <%= field.type %> <% if (field.jsonConfig !== '') {%>`<%- field.jsonConfig %>`<%}%><% }); %>
-  // Auto-gen fields : dont remove
 }
 
 // CreateListResponseDTOFromPage create page from page models.<%= entityClass %>

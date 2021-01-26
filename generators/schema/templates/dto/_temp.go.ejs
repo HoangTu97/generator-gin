@@ -10,8 +10,6 @@ type <%= entityClass %>DTO struct {
   CreatedAt time.Time
   UpdatedAt time.Time
   DeletedAt *time.Time
-
-  // Auto-gen fields<% fields.forEach(function(field){ %>
+<% fields.forEach(function(field){ %>
   <%= field.name %> <%= field.type %> <% if (field.jsonConfig !== '') {%>`<%- field.jsonConfig %>`<%}%><% }); %>
-  // Auto-gen fields : dont remove
 }
