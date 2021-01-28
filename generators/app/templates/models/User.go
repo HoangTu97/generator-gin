@@ -1,15 +1,14 @@
 package models
 
 import (
-  "time"
-
   uuid "github.com/satori/go.uuid"
   "gorm.io/gorm"
 )
 
 // User entity
 type User struct {
-  ID       uint            `gorm:"primary_key"`
+  gorm.Model
+
   UserID   uuid.UUID       `gorm:"type:uuid;index:user_id"`
   Name     string          `gorm:"type:varchar(255)"`
   Password string          `gorm:"type:varchar(255)" json:"Password"`
@@ -23,10 +22,6 @@ type User struct {
   Long       float32 `gorm:"index:location"`
   Lat        float32 `gorm:"index:location"`
   ZipCode    uint16
-
-  CreatedAt time.Time
-  UpdatedAt time.Time
-  DeletedAt *time.Time `sql:"index"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {

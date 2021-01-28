@@ -3,6 +3,7 @@ package dto
 import (
   "<%= appName %>/pkg/domain"
   "time"
+  "gorm.io/gorm"
 )
 
 // UserDTO godoc
@@ -24,7 +25,7 @@ type UserDTO struct {
 
   CreatedAt time.Time  `json:"createdAt"`
   UpdatedAt time.Time  `json:"updatedAt"`
-  DeletedAt *time.Time `json:"deletedAt"`
+  DeletedAt gorm.DeletedAt `json:"deletedAt"`
 }
 
 func (dto *UserDTO) GetRolesInterface() []interface{} {

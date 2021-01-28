@@ -2,51 +2,33 @@ package service_proxy
 
 import (
   "<%= appName %>/dto"
+  "<%= appName %>/helpers/page"
+  "<%= appName %>/helpers/pagination"
   "<%= appName %>/helpers/constants"
   "<%= appName %>/pkg/cache"
   "<%= appName %>/service"
+
   "encoding/json"
 )
 
-type userProxy struct {
+type user struct {
   service service.User
   cache   cache.Cache
 }
 
 func NewUser(service service.User, cache cache.Cache) service.User {
-  return &userProxy{service: service, cache: cache}
+  return &user{service: service, cache: cache}
 }
 
-func (s *userProxy) Create(userDTO dto.UserDTO) (dto.UserDTO, bool) {
+func (s *user) Create(userDTO dto.UserDTO) (dto.UserDTO, bool) {
   return s.service.Create(userDTO)
 }
 
-func (s *userProxy) GetUserToken(userDTO dto.UserDTO) (string, error) {
-  var token string
-  key := s.cache.GenKey(constants.CACHE.USER, "token", userDTO.UserID)
-  if s.cache.Exists(key) {
-    data, err := s.cache.Get(key)
-    if err != nil {
-      return "", err
-    }
-    err = json.Unmarshal(data, &token)
-    if err != nil {
-      return "", err
-    }
-    return token, nil
-  }
-
-  token, err := s.service.GetUserToken(userDTO)
-  if err != nil {
-    return "", err
-  }
-
-  _ = s.cache.Set(key, token, 3600)
-
-  return token, nil
+func (p *user) Save(userDTO dto.UserDTO) (dto.UserDTO, bool) {
+  return p.service.Save(userDTO)
 }
 
-func (s *userProxy) FindOneLogin(username string, password string) (dto.UserDTO, bool) {
+func (s *user) FindOneLogin(username string, password string) (dto.UserDTO, bool) {
   var userDTO dto.UserDTO
 
   key := s.cache.GenKey(constants.CACHE.USER, username, password)
@@ -72,11 +54,11 @@ func (s *userProxy) FindOneLogin(username string, password string) (dto.UserDTO,
   return userDTO, true
 }
 
-func (s *userProxy) FindOneByUserID(userId string) (dto.UserDTO, bool) {
+func (s *user) FindOneByUserID(userId string) (dto.UserDTO, bool) {
   return s.service.FindOneByUserID(userId)
 }
 
-func (s *userProxy) FindOneByUsername(username string) (dto.UserDTO, bool) {
+func (s *user) FindOneByUsername(username string) (dto.UserDTO, bool) {
   var userDTO dto.UserDTO
 
   key := s.cache.GenKey(constants.CACHE.USER, "name", username)
@@ -102,6 +84,10 @@ func (s *userProxy) FindOneByUsername(username string) (dto.UserDTO, bool) {
   return userDTO, true
 }
 
-func (s *userProxy) GenerateToken(userID string, username string, roles []string) (string, error) {
-  return s.service.GenerateToken(userID, username, roles)
+func (p *user) FindPage(pageable pagination.Pageable) page.Page {
+  return p.service.FindPage(pageable)
+}
+
+func (p *user) Delete(id uint) {
+  p.service.Delete(id)
 }

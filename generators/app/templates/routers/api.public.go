@@ -10,15 +10,15 @@ func registerPublicApi(apiRoutes *gin.RouterGroup) {
   publicRoutes := apiRoutes.Group("/public")
   // Api declare
   {
-    publicUserRoutes := publicRoutes.Group("/user")
-    publicUserRoutes.POST("/register", config.UserController.Register)
-    publicUserRoutes.POST("/login", config.UserController.Login)
-  }
-  {
     publicFileRoutes := publicRoutes.Group("/file")
     publicFileRoutes.POST("/upload", config.FileController.Upload)
     publicFileRoutes.GET("/:id", config.FileController.FileDisplay)
     publicFileRoutes.GET("/:id/download", config.FileController.Download)
+  }
+  {
+    publicUserRoutes := publicRoutes.Group("/auth")
+    publicUserRoutes.POST("/register", config.AuthController.Register)
+    publicUserRoutes.POST("/login", config.AuthController.Login)
   }
   // Api declare end : dont remove
 }

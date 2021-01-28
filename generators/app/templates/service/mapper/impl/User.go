@@ -8,6 +8,7 @@ import (
   "<%= appName %>/service/mapper"
 
   uuid "github.com/satori/go.uuid"
+  "gorm.io/gorm"
 )
 
 type user struct {}
@@ -25,11 +26,11 @@ func (m *user) ToDTO(entity models.User) dto.UserDTO {
   }
 
   return dto.UserDTO{
-    ID:         entity.ID,
+    ID:         entity.Model.ID,
+    CreatedAt:  entity.Model.CreatedAt,
+    UpdatedAt:  entity.Model.UpdatedAt,
+    DeletedAt:  entity.Model.DeletedAt,
     UserID:     entity.UserID.String(),
-    CreatedAt:  entity.CreatedAt,
-    UpdatedAt:  entity.UpdatedAt,
-    DeletedAt:  entity.DeletedAt,
     Name:       entity.Name,
     Password:   entity.Password,
     Roles:      roles,
@@ -55,11 +56,13 @@ func (m *user) ToEntity(dto dto.UserDTO) models.User {
   }
 
   return models.User{
-    ID:         dto.ID,
+    Model: gorm.Model{
+      ID:         dto.ID,
+      CreatedAt:  dto.CreatedAt,
+      UpdatedAt:  dto.UpdatedAt,
+      DeletedAt:  dto.DeletedAt,
+    },
     UserID:     id,
-    CreatedAt:  dto.CreatedAt,
-    UpdatedAt:  dto.UpdatedAt,
-    DeletedAt:  dto.DeletedAt,
     Name:       dto.Name,
     Password:   dto.Password,
     Roles:      converter.ToStr(roles),

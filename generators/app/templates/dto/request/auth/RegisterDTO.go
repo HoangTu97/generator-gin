@@ -1,4 +1,4 @@
-package requestuser
+package AuthRequest
 
 // RegisterDTO godoc
 type RegisterDTO struct {

@@ -10,8 +10,8 @@ func registerPrivateApi(apiRoutes *gin.RouterGroup) {
   privateRoutes := apiRoutes.Group("/private")
   // Api declare
   {
-    privateUserRoutes := privateRoutes.Group("/user")
-    privateUserRoutes.GET("/userinfo", config.UserController.UserInfo)
+    privateUserRoutes := privateRoutes.Group("/auth")
+    privateUserRoutes.GET("/userinfo", config.AuthController.UserInfo)
   }
   // Api declare end : dont remove
 }
