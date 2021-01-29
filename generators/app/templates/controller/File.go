@@ -4,7 +4,7 @@ import (
   "<%= appName %>/dto/response"
   fileUtil "<%= appName %>/helpers/file"
   "<%= appName %>/pkg/converter"
-  "<%= appName %>/service"
+  helperService "<%= appName %>/helpers/service"
 
   "fmt"
   "io/ioutil"
@@ -21,10 +21,10 @@ type File interface {
 }
 
 type file struct {
-  service service.File
+  service helperService.File
 }
 
-func NewFile(service service.File) File {
+func NewFile(service helperService.File) File {
   return &file{service: service}
 }
 
@@ -46,10 +46,10 @@ func (r *file) Upload(c *gin.Context) {
   // baseFilename := filepath.Base(file.Filename)
   ext := filepath.Ext(file.Filename)
 
-  filename := r.service.GenFileBaseFileName(ext)
-  path := r.service.GetFilePath(filename)
+  filename := r.service.GenBaseName(ext)
+  path := r.service.GetPath(filename)
 
-  _ = fileUtil.MkDir(r.service.GetFilePathDir(filename))
+  _ = fileUtil.MkDir(r.service.GetPathDir(filename))
   if err := c.SaveUploadedFile(file, path); err != nil {
     response.CreateErrorResponse(c, err.Error())
     return
@@ -67,7 +67,7 @@ func (r *file) Upload(c *gin.Context) {
 func (r *file) Download(c *gin.Context) {
   filename := converter.MustString(c.Param("id"))
 
-  filePath := r.service.GetFilePath(filename)
+  filePath := r.service.GetPath(filename)
 
   c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
   // fmt.Sprintf("attachment; filename=%s", filename) Downloaded file renamed
@@ -84,7 +84,7 @@ func (r *file) Download(c *gin.Context) {
 func (r *file) FileDisplay(c *gin.Context) {
   filename := converter.MustString(c.Param("id"))
 
-  filePath := r.service.GetFilePath(filename)
+  filePath := r.service.GetPath(filename)
 
   b, err := ioutil.ReadFile(filePath) // just pass the file name
   if err != nil {

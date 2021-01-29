@@ -4,7 +4,7 @@ import (
   "<%= appName %>/pkg/domain"
   "<%= appName %>/dto"
   "<%= appName %>/helpers/jwt"
-  "<%= appName %>/service"
+  "<%= appName %>/helpers/service"
 
   "github.com/gin-gonic/gin"
 )

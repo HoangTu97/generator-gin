@@ -3,6 +3,7 @@ package config
 import (
   "<%= appName %>/controller"
   "<%= appName %>/helpers/jwt"
+  helperServiceImpl "<%= appName %>/helpers/service/impl"
   "<%= appName %>/pkg/cache"
   "<%= appName %>/repository/impl"
   "<%= appName %>/repository/proxy"
@@ -39,8 +40,8 @@ func SetupController(
   // Proxy Repositories declare end : dont remove
 
   // Services declare
-  fileService := service_impl.NewFile()
-  authService := service_impl.NewAuth(jwtManager)
+  fileService := helperServiceImpl.NewFile()
+  authService := helperServiceImpl.NewAuth(jwtManager)
   userService := service_impl.NewUser(userRepoProxy, userMapper)
   // Services declare end : dont remove
 

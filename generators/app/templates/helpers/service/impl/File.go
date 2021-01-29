@@ -1,7 +1,7 @@
 package service_impl
 
 import (
-  "<%= appName %>/service"
+  "<%= appName %>/helpers/service"
 
   "fmt"
   "hash/fnv"
@@ -20,11 +20,11 @@ func NewFile() service.File {
   }
 }
 
-func (s *file) GenFileBaseFileName(extension string) string {
+func (s *file) GenBaseName(extension string) string {
   return uuid.NewV4().String() + extension
 }
 
-func (s *file) GetFilePath(fileName string) string {
+func (s *file) GetPath(fileName string) string {
   hash := s.hash(fileName)
   var mask uint32 = 255
   firstDir := hash & mask
@@ -32,8 +32,8 @@ func (s *file) GetFilePath(fileName string) string {
   return filepath.Join(s.location, fmt.Sprintf("%02x", firstDir), fmt.Sprintf("%02x", secondFir), fileName)
 }
 
-func (s *file) GetFilePathDir(fileName string) string {
-  return filepath.Dir(s.GetFilePath(fileName))
+func (s *file) GetPathDir(fileName string) string {
+  return filepath.Dir(s.GetPath(fileName))
 }
 
 func (s *file) hash(str string) uint32 {
