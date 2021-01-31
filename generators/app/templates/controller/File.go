@@ -2,13 +2,11 @@ package controller
 
 import (
   "<%= appName %>/dto/response"
-  fileUtil "<%= appName %>/helpers/file"
   "<%= appName %>/pkg/converter"
   FileService "<%= appName %>/helpers/service/File"
 
   "fmt"
   "io/ioutil"
-  "path/filepath"
 
   "github.com/gabriel-vasile/mimetype"
   "github.com/gin-gonic/gin"
@@ -44,12 +42,12 @@ func (r *file) Upload(c *gin.Context) {
   }
 
   // baseFilename := filepath.Base(file.Filename)
-  ext := filepath.Ext(file.Filename)
+  ext := r.service.Extension(file.Filename)
 
   filename := r.service.GenBaseName(ext)
   path := r.service.GetPath(filename)
 
-  _ = fileUtil.MkDir(r.service.GetPathDir(filename))
+  _ = r.service.MakeDirectory(r.service.GetPathDir(filename))
   if err := c.SaveUploadedFile(file, path); err != nil {
     response.CreateErrorResponse(c, err.Error())
     return
