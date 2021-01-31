@@ -8,7 +8,7 @@ import (
   "github.com/gin-gonic/gin"
 
   "<%= appName %>/config"
-  "<%= appName %>/pkg/cache"
+  "<%= appName %>/helpers/service/Cache"
   "<%= appName %>/pkg/database"
   "<%= appName %>/pkg/logging"
   "<%= appName %>/routers"
@@ -30,11 +30,11 @@ func main() {
   // logging.NewLogger(*config.LoggerSetting)
   logging.NewZeroLog()
 
-  cache := cache.NewCache(*(*config.CacheSetting).Config)
+  cacheManager := Cache.NewManager()
 
   jwtManager := config.SetupJWT(*config.AppSetting)
 
-  config.SetupController(database, jwtManager, cache)
+  config.SetupController(database, jwtManager, cacheManager)
 
   gin.ForceConsoleColor()
   gin.SetMode(config.ServerSetting.RunMode)

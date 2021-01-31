@@ -1,8 +1,6 @@
-package service_impl
+package File
 
 import (
-  "<%= appName %>/helpers/service"
-
   "fmt"
   "hash/fnv"
   "path/filepath"
@@ -10,21 +8,27 @@ import (
   uuid "github.com/satori/go.uuid"
 )
 
-type file struct {
+type Service interface {
+  GenBaseName(extension string) string
+  GetPath(fileName string) string
+  GetPathDir(fileName string) string
+}
+
+type service struct {
   location string
 }
 
-func NewFile() service.File {
-  return &file{
+func NewService() Service {
+  return &service{
     location: "./data/Files",
   }
 }
 
-func (s *file) GenBaseName(extension string) string {
+func (s *service) GenBaseName(extension string) string {
   return uuid.NewV4().String() + extension
 }
 
-func (s *file) GetPath(fileName string) string {
+func (s *service) GetPath(fileName string) string {
   hash := s.hash(fileName)
   var mask uint32 = 255
   firstDir := hash & mask
@@ -32,11 +36,11 @@ func (s *file) GetPath(fileName string) string {
   return filepath.Join(s.location, fmt.Sprintf("%02x", firstDir), fmt.Sprintf("%02x", secondFir), fileName)
 }
 
-func (s *file) GetPathDir(fileName string) string {
+func (s *service) GetPathDir(fileName string) string {
   return filepath.Dir(s.GetPath(fileName))
 }
 
-func (s *file) hash(str string) uint32 {
+func (s *service) hash(str string) uint32 {
   h := fnv.New32a()
   _, _ = h.Write([]byte(str))
   return h.Sum32()

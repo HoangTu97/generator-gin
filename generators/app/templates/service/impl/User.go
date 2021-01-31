@@ -5,28 +5,28 @@ import (
   "<%= appName %>/dto"
   "<%= appName %>/helpers/page"
   "<%= appName %>/helpers/pagination"
+  "<%= appName %>/helpers/service/Hash"
   "<%= appName %>/repository"
   "<%= appName %>/service"
   "<%= appName %>/service/mapper"
-
-  "golang.org/x/crypto/bcrypt"
 )
 
 type user struct {
   repository repository.User
   mapper     mapper.User
+  hashService Hash.Service
 }
 
-func NewUser(repository repository.User, mapper mapper.User) service.User {
-  return &user{repository: repository, mapper: mapper}
+func NewUser(repository repository.User, mapper mapper.User, hashService Hash.Service) service.User {
+  return &user{repository: repository, mapper: mapper, hashService: hashService}
 }
 
 func (s *user) Create(userDTO dto.UserDTO) (dto.UserDTO, bool) {
-  pass, err := bcrypt.GenerateFromPassword([]byte(userDTO.Password), bcrypt.DefaultCost)
-  if err != nil {
+  pass := s.hashService.Make(userDTO.Password)
+  if pass == "" {
     return dto.UserDTO{}, false
   }
-  userDTO.Password = string(pass)
+  userDTO.Password = pass
   userDTO.Roles = append(userDTO.Roles, domain.ROLE_USER)
 
   user := s.mapper.ToEntity(userDTO)
@@ -51,8 +51,8 @@ func (s *user) FindOneLogin(username string, password string) (dto.UserDTO, bool
     return dto.UserDTO{}, false
   }
 
-  errf := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-  if errf != nil && errf == bcrypt.ErrMismatchedHashAndPassword {
+  valid := s.hashService.Check(user.Password, password)
+  if !valid {
     return dto.UserDTO{}, false
   }
 

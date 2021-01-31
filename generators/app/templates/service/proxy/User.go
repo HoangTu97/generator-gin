@@ -5,18 +5,16 @@ import (
   "<%= appName %>/helpers/page"
   "<%= appName %>/helpers/pagination"
   "<%= appName %>/helpers/constants"
-  "<%= appName %>/pkg/cache"
+  "<%= appName %>/helpers/service/Cache"
   "<%= appName %>/service"
-
-  "encoding/json"
 )
 
 type user struct {
   service service.User
-  cache   cache.Cache
+  cache   Cache.Service
 }
 
-func NewUser(service service.User, cache cache.Cache) service.User {
+func NewUser(service service.User, cache Cache.Service) service.User {
   return &user{service: service, cache: cache}
 }
 
@@ -32,16 +30,12 @@ func (s *user) FindOneLogin(username string, password string) (dto.UserDTO, bool
   var userDTO dto.UserDTO
 
   key := s.cache.GenKey(constants.CACHE.USER, username, password)
-  if s.cache.Exists(key) {
-    data, err := s.cache.Get(key)
-    if err != nil {
+  if s.cache.Has(key) {
+    data := s.cache.Get(key)
+    if data == nil {
       return dto.UserDTO{}, false
     }
-    err = json.Unmarshal(data, &userDTO)
-    if err != nil {
-      return dto.UserDTO{}, false
-    }
-    return userDTO, true
+    return data.(dto.UserDTO), true
   }
 
   userDTO, exist := s.service.FindOneLogin(username, password)
@@ -62,16 +56,12 @@ func (s *user) FindOneByUsername(username string) (dto.UserDTO, bool) {
   var userDTO dto.UserDTO
 
   key := s.cache.GenKey(constants.CACHE.USER, "name", username)
-  if s.cache.Exists(key) {
-    data, err := s.cache.Get(key)
-    if err != nil {
+  if s.cache.Has(key) {
+    data := s.cache.Get(key)
+    if data == nil {
       return dto.UserDTO{}, false
     }
-    err = json.Unmarshal(data, &userDTO)
-    if err != nil {
-      return dto.UserDTO{}, false
-    }
-    return userDTO, true
+    return data.(dto.UserDTO), true
   }
 
   userDTO, exist := s.service.FindOneByUsername(username)

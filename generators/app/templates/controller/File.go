@@ -4,7 +4,7 @@ import (
   "<%= appName %>/dto/response"
   fileUtil "<%= appName %>/helpers/file"
   "<%= appName %>/pkg/converter"
-  helperService "<%= appName %>/helpers/service"
+  FileService "<%= appName %>/helpers/service/File"
 
   "fmt"
   "io/ioutil"
@@ -21,10 +21,10 @@ type File interface {
 }
 
 type file struct {
-  service helperService.File
+  service FileService.Service
 }
 
-func NewFile(service helperService.File) File {
+func NewFile(service FileService.Service) File {
   return &file{service: service}
 }
 

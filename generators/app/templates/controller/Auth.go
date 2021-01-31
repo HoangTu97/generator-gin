@@ -7,7 +7,7 @@ import (
   "<%= appName %>/dto/response"
   AuthResponse "<%= appName %>/dto/response/auth"
   "<%= appName %>/helpers/constants"
-  helperService "<%= appName %>/helpers/service"
+  AuthService "<%= appName %>/helpers/service/Auth"
   "<%= appName %>/service"
 
   "github.com/gin-gonic/gin"
@@ -21,11 +21,11 @@ type Auth interface {
 }
 
 type auth struct {
-  service helperService.Auth
+  service AuthService.Service
   userService service.User
 }
 
-func NewAuth(service helperService.Auth, userService service.User) Auth {
+func NewAuth(service AuthService.Service, userService service.User) Auth {
   return &auth{service: service, userService: userService}
 }
 

@@ -3,8 +3,12 @@ package config
 import (
   "<%= appName %>/controller"
   "<%= appName %>/helpers/jwt"
-  helperServiceImpl "<%= appName %>/helpers/service/impl"
-  "<%= appName %>/pkg/cache"
+  "<%= appName %>/helpers/service/Auth"
+  "<%= appName %>/helpers/service/File"
+  "<%= appName %>/helpers/service/Cache"
+  // "<%= appName %>/helpers/service/Mail"
+  "<%= appName %>/helpers/service/Hash"
+  "<%= appName %>/helpers/service/Schedule"
   "<%= appName %>/repository/impl"
   "<%= appName %>/repository/proxy"
   "<%= appName %>/service/impl"
@@ -25,7 +29,7 @@ var (
 func SetupController(
   db *gorm.DB, 
   jwtManager jwt.JwtManager,
-  cache cache.Cache,
+  cacheManager Cache.Manager,
 ) {
   // Mappers declare
   userMapper := mapper_impl.NewUser()
@@ -40,13 +44,17 @@ func SetupController(
   // Proxy Repositories declare end : dont remove
 
   // Services declare
-  fileService := helperServiceImpl.NewFile()
-  authService := helperServiceImpl.NewAuth(jwtManager)
-  userService := service_impl.NewUser(userRepoProxy, userMapper)
+  cacheService := cacheManager.Driver("Memcached")
+  fileService := File.NewService()
+  // mailService := Mail.NewService()
+  hashService := Hash.NewService("")
+  scheduleService := Schedule.NewService()
+  authService := Auth.NewService(jwtManager)
+  userService := service_impl.NewUser(userRepoProxy, userMapper, hashService)
   // Services declare end : dont remove
 
   // Proxy Services declare
-  userServiceProxy := service_proxy.NewUser(userService, cache)
+  userServiceProxy := service_proxy.NewUser(userService, cacheService)
   // Proxy Services declare end : dont remove
 
   // Controllers declare
