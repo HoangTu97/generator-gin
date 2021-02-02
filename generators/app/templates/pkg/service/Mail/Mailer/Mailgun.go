@@ -28,10 +28,8 @@ func (m *mailgunMailer) Send(message MailMessage.Message) {
   defer cancel()
 
   if len(message.GetTo()) > 1 {
-    for i, s := range message.GetTo() {
-      if i != 0 {
-        mgMsg.AddRecipient(s)
-      }
+    for i := 1; i < len(message.GetTo()); i++ {
+      mgMsg.AddRecipient(message.GetTo()[i])
     }
   }
 
