@@ -32,7 +32,6 @@ module.exports = class extends Generator {
     ];
 
     return this.prompt(prompts).then(props => {
-      // To access props later use this.props.someAnswer;
       this.props = props;
       this.props.destinationPath = this.destinationPath();
     });
@@ -47,9 +46,8 @@ module.exports = class extends Generator {
   }
 
   install() {
-    // this.installDependencies();
     this.spawnCommand('make', ['docs']);
-    this.spawnCommand('go', ['get']);
+    this.spawnCommand('go', ['mod','vendor']);
   }
 
   end() {
