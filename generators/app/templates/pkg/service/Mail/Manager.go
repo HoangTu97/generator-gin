@@ -43,7 +43,7 @@ func (m *manager) resolve(name string) Mailer {
   case "smtp":
     return MailMailer.NewSmtp("abc", "", "localhost", "8080")
   case "ses":
-    return MailMailer.NewSes()
+    return MailMailer.NewSes("abc", "us-west-2")
   case "mailgun":
     return MailMailer.NewMailgun("abc", "localhost", "")
   case "postmark":
