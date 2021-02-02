@@ -1,7 +1,7 @@
 package Mailer
 
 import (
-  "<%= appName %>/pkg/service/Mail/Message"
+  MailMessage "<%= appName %>/pkg/service/Mail/Message"
 
   "context"
   "log"
@@ -12,8 +12,6 @@ import (
 
 type mailgunMailer struct {
   username string
-  domain string
-  apiKey string
   mg *mailgun.MailgunImpl
 }
 

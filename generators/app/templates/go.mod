@@ -8,7 +8,7 @@ require (
   github.com/dgrijalva/jwt-go v3.2.0+incompatible
   github.com/gabriel-vasile/mimetype v1.1.2
   github.com/gin-contrib/gzip v0.0.3 // indirect
-  github.com/gin-gonic/contrib v0.0.0-20201101042839-6a891bf89f19
+  github.com/gin-gonic/contrib v0.0.0-20201101042839-6a891bf89f19 // indirect
   github.com/gin-gonic/gin v1.6.3
   github.com/go-ini/ini v1.62.0
   github.com/go-openapi/spec v0.20.0 // indirect
@@ -17,6 +17,7 @@ require (
   github.com/gomodule/redigo v2.0.1-0.20180401191855-9352ab68be13+incompatible
   github.com/google/go-cmp v0.5.4 // indirect
   github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 // indirect
+  github.com/keighl/postmark v0.0.0-20190821160221-28358b1a94e3
   github.com/leodido/go-urn v1.2.1 // indirect
   github.com/mailgun/mailgun-go/v4 v4.3.3
   github.com/patrickmn/go-cache v2.1.0+incompatible

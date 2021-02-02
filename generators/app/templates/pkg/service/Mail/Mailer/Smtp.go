@@ -1,7 +1,7 @@
 package Mailer
 
 import (
-	"<%= appName %>/pkg/service/Mail/Message"
+	MailMessage "<%= appName %>/pkg/service/Mail/Message"
 
 	"net/smtp"
 	"fmt"
