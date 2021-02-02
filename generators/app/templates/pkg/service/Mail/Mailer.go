@@ -1,7 +1,7 @@
 package Mail
 
 import (
-  "<%= appName %>/helpers/service/Mail/Message"
+  "<%= appName %>/pkg/service/Mail/Message"
 )
 
 type Mailer interface {

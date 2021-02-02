@@ -5,7 +5,7 @@ import (
   "<%= appName %>/dto"
   "<%= appName %>/helpers/page"
   "<%= appName %>/helpers/pagination"
-  "<%= appName %>/helpers/service/Hash"
+  "<%= appName %>/pkg/service/Hash"
   "<%= appName %>/repository"
   "<%= appName %>/service"
   "<%= appName %>/service/mapper"

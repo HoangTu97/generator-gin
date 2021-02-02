@@ -3,7 +3,7 @@ package controller
 import (
   "<%= appName %>/dto/response"
   "<%= appName %>/pkg/converter"
-  FileService "<%= appName %>/helpers/service/File"
+  FileService "<%= appName %>/pkg/service/File"
 
   "fmt"
   "io/ioutil"

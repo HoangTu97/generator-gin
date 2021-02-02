@@ -1,7 +1,7 @@
 package Mail
 
 import (
-  MailMailer "<%= appName %>/helpers/service/Mail/Mailer"
+  MailMailer "<%= appName %>/pkg/service/Mail/Mailer"
 )
 
 type Manager interface {

@@ -5,7 +5,7 @@ import (
   "<%= appName %>/helpers/page"
   "<%= appName %>/helpers/pagination"
   "<%= appName %>/helpers/constants"
-  "<%= appName %>/helpers/service/Cache"
+  "<%= appName %>/pkg/service/Cache"
   "<%= appName %>/service"
 )
 

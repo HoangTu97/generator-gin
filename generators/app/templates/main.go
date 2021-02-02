@@ -8,8 +8,8 @@ import (
   "github.com/gin-gonic/gin"
 
   "<%= appName %>/config"
-  "<%= appName %>/helpers/service/Cache"
-  "<%= appName %>/helpers/service/Mail"
+  "<%= appName %>/pkg/service/Cache"
+  "<%= appName %>/pkg/service/Mail"
   "<%= appName %>/pkg/database"
   "<%= appName %>/pkg/logging"
   "<%= appName %>/routers"

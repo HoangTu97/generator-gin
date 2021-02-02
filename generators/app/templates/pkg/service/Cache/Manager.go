@@ -1,7 +1,7 @@
 package Cache
 
 import (
-  "<%= appName %>/helpers/service/Cache/Store"
+  "<%= appName %>/pkg/service/Cache/Store"
 )
 
 type Manager interface {

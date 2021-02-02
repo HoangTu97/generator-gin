@@ -7,7 +7,7 @@ import (
   "<%= appName %>/dto/response"
   AuthResponse "<%= appName %>/dto/response/auth"
   "<%= appName %>/helpers/constants"
-  AuthService "<%= appName %>/helpers/service/Auth"
+  AuthService "<%= appName %>/pkg/service/Auth"
   "<%= appName %>/service"
 
   "github.com/gin-gonic/gin"
