@@ -45,7 +45,7 @@ func (m *manager) resolve(name string) Mailer {
   case "ses":
     return MailMailer.NewSes()
   case "mailgun":
-    return MailMailer.NewMailgun()
+    return MailMailer.NewMailgun("abc", "localhost", "")
   case "postmark":
     return MailMailer.NewPostmark()
   }

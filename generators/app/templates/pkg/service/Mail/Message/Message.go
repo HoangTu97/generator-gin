@@ -23,6 +23,8 @@ type Message interface {
   GetTo() []string
   GetCc() string
   GetBcc() string
+  GetSubject() string
+  GetBody() string
 
   String() string
   ToBytes() []byte
@@ -94,6 +96,14 @@ func (m *message) GetCc() string {
 
 func (m *message) GetBcc() string {
   return m.bcc
+}
+
+func (m *message) GetSubject() string {
+  return m.subject
+}
+
+func (m *message) GetBody() string {
+  return m.body
 }
 
 func (m *message) String() string {

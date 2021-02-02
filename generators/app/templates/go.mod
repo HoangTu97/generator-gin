@@ -18,6 +18,7 @@ require (
   github.com/google/go-cmp v0.5.4 // indirect
   github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 // indirect
   github.com/leodido/go-urn v1.2.1 // indirect
+  github.com/mailgun/mailgun-go/v4 v4.3.3
   github.com/patrickmn/go-cache v2.1.0+incompatible
   github.com/rs/zerolog v1.20.0
   github.com/satori/go.uuid v1.2.0
