@@ -65,7 +65,7 @@ func (m *manager) getDefaultDriver() string {
   return "Memcached"
 }
 
-func (m *manager) repository(store CacheStore.Store) Repository {
+func (m *manager) repository(store Store) Repository {
   return NewRepository(store)
 }
 

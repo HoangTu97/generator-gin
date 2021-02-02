@@ -11,7 +11,7 @@ type redisStore struct {
   conn *redis.Pool
 }
 
-func NewRedis() Store {
+func NewRedis() *redisStore {
   redisConn := &redis.Pool{
     MaxIdle:     30,
     MaxActive:   30,

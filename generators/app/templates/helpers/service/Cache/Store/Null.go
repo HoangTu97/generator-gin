@@ -3,7 +3,7 @@ package CacheStore
 type nullStore struct {
 }
 
-func NewNull() Store {
+func NewNull() *nullStore {
   return &nullStore{}
 }
 

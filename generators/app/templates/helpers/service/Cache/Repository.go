@@ -1,9 +1,5 @@
 package Cache
 
-import (
-  "<%= appName %>/helpers/service/Cache/Store"
-)
-
 type Repository interface {
   Has(key string) bool
   Missing(key string) bool
@@ -29,10 +25,10 @@ type Repository interface {
 }
 
 type repository struct {
-  store CacheStore.Store
+  store Store
 }
 
-func NewRepository(store CacheStore.Store) Repository {
+func NewRepository(store Store) Repository {
   return &repository{store: store}
 }
 

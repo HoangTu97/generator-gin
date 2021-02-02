@@ -1,4 +1,4 @@
-package CacheStore
+package Cache
 
 type Store interface {
   Get(key string) interface{}
