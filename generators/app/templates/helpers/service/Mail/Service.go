@@ -1,29 +1,30 @@
 package Mail
 
 import (
-  "log"
+  "<%= appName %>/helpers/service/Mail/Message"
 )
 
 type Service interface {
-  NewMessage() Message
+  NewMessage() MailMessage.Message
 
   // Send
-  Send(message Message)
-  // Queue(message Message)
-  // Later(message Message, firetime int)
+  Send(message MailMessage.Message)
+  // Queue(message MailMessage.Message)
+  // Later(message MailMessage.Message, firetime int)
 }
 
 type service struct {
+  mailer Mailer
 }
 
-func NewService() Service {
-  return &service{}
+func NewService(mailer Mailer) Service {
+  return &service{mailer: mailer}
 }
 
-func (s *service) NewMessage() Message {
-  return NewMessage()
+func (s *service) NewMessage() MailMessage.Message {
+  return MailMessage.NewMessage()
 }
 
-func (s *service) Send(message Message) {
-  log.Println("Mail service : Send not implement : " + message.String())
+func (s *service) Send(message MailMessage.Message) {
+  s.mailer.Send(message)
 }

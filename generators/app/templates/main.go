@@ -9,6 +9,7 @@ import (
 
   "<%= appName %>/config"
   "<%= appName %>/helpers/service/Cache"
+  "<%= appName %>/helpers/service/Mail"
   "<%= appName %>/pkg/database"
   "<%= appName %>/pkg/logging"
   "<%= appName %>/routers"
@@ -31,10 +32,11 @@ func main() {
   logging.NewZeroLog()
 
   cacheManager := Cache.NewManager()
+  mailManager := Mail.NewManager()
 
   jwtManager := config.SetupJWT(*config.AppSetting)
 
-  config.SetupController(database, jwtManager, cacheManager)
+  config.SetupController(database, jwtManager, cacheManager, mailManager)
 
   gin.ForceConsoleColor()
   gin.SetMode(config.ServerSetting.RunMode)

@@ -6,9 +6,9 @@ import (
   "<%= appName %>/helpers/service/Auth"
   "<%= appName %>/helpers/service/File"
   "<%= appName %>/helpers/service/Cache"
-  // "<%= appName %>/helpers/service/Mail"
+  "<%= appName %>/helpers/service/Mail"
   "<%= appName %>/helpers/service/Hash"
-  "<%= appName %>/helpers/service/Schedule"
+  // "<%= appName %>/helpers/service/Schedule"
   "<%= appName %>/repository/impl"
   "<%= appName %>/repository/proxy"
   "<%= appName %>/service/impl"
@@ -30,6 +30,7 @@ func SetupController(
   db *gorm.DB, 
   jwtManager jwt.JwtManager,
   cacheManager Cache.Manager,
+  mailManager Mail.Manager,
 ) {
   // Mappers declare
   userMapper := mapper_impl.NewUser()
@@ -46,9 +47,9 @@ func SetupController(
   // Services declare
   cacheService := cacheManager.Driver("Memcached")
   fileService := File.NewService()
-  // mailService := Mail.NewService()
+  mailService := mailManager.Mailer("smtp")
   hashService := Hash.NewService("")
-  scheduleService := Schedule.NewService()
+  // scheduleService := Schedule.NewService()
   authService := Auth.NewService(jwtManager)
   userService := service_impl.NewUser(userRepoProxy, userMapper, hashService)
   // Services declare end : dont remove
@@ -62,4 +63,8 @@ func SetupController(
   AuthController = controller.NewAuth(authService, userServiceProxy)
   UserController = controller.NewUser(userServiceProxy)
   // Controllers declare end : dont remove
+
+  message := mailService.NewMessage()
+  message.To([]string{"abc"})
+  mailService.Send(message)
 }
