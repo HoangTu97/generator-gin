@@ -48,12 +48,6 @@ func (m *manager) resolve(name string) Mailer {
     return MailMailer.NewMailgun()
   case "postmark":
     return MailMailer.NewPostmark()
-  case "sendmail":
-    return MailMailer.NewSendmail()
-  case "log":
-    return MailMailer.NewLog()
-  case "array":
-    return MailMailer.NewArray()
   }
   return nil
 }
