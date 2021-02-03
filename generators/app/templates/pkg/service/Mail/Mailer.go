@@ -5,5 +5,5 @@ import (
 )
 
 type Mailer interface {
-	Send(message MailMessage.Message)
+  Send(message MailMessage.Message)
 }
