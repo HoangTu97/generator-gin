@@ -48,6 +48,8 @@ func (m *manager) resolve(name string) Mailer {
     return MailMailer.NewMailgun("abc", "localhost", "")
   case "postmark":
     return MailMailer.NewPostmark("abc", "[SERVER-TOKEN]", "[ACCOUNT-TOKEN]")
+  case "sendgrid":
+    return MailMailer.NewSendgrid("abc", "SENDGRID_API_KEY")
   }
   return nil
 }
