@@ -2,6 +2,10 @@ package Cache
 
 import (
   "<%= appName %>/pkg/service/Cache/Store"
+
+  "fmt"
+
+  "github.com/spf13/viper"
 )
 
 type Manager interface {
@@ -47,22 +51,31 @@ func (m *manager) resolve(name string) Repository {
   //   return m.repository(CacheStore.NewArray())
   // case "File":
   //   return m.repository(CacheStore.NewFile())
-  case "Memcached":
-    return m.repository(CacheStore.NewMemcached())
-  case "Null":
+  case "memcached":
+    return m.repository(CacheStore.NewMemcached(
+      viper.GetDuration("cache.drivers.memcached.defaultExpiration"),
+      viper.GetDuration("cache.drivers.memcached.purgeDuration"),
+    ))
+  case "null":
     return m.repository(CacheStore.NewNull())
-  case "Redis":
-    return m.repository(CacheStore.NewRedis())
+  case "redis":
+    return m.repository(CacheStore.NewRedis(
+      fmt.Sprintf("%s:%s",viper.GetString("cache.drivers.redis.host"),viper.GetString("cache.drivers.redis.port")),
+      viper.GetString("cache.drivers.redis.port"),
+      viper.GetInt("cache.drivers.redis.maxIdle"),
+      viper.GetInt("cache.drivers.redis.maxActive"),
+      viper.GetDuration("cache.drivers.redis.idleTimeout"),
+    ))
   // case "Database":
   //   return m.repository(CacheStore.NewDatabase())
   // case "Dynamodb":
   //   return m.repository(CacheStore.NewDynamodb())
   }
-  return m.repository(CacheStore.NewMemcached())
+  return m.repository(CacheStore.NewNull())
 }
 
 func (m *manager) getDefaultDriver() string {
-  return "Memcached"
+  return viper.GetString("cache.default")
 }
 
 func (m *manager) repository(store Store) Repository {

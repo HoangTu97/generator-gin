@@ -1,4 +1,4 @@
-package Mail
+package Sms
 
 import (
   SmsMessage "<%= appName %>/pkg/service/Sms/Message"

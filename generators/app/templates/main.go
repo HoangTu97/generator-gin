@@ -5,13 +5,14 @@ import (
   "log"
   "net/http"
 
+  "github.com/spf13/viper"
   "github.com/gin-gonic/gin"
 
   "<%= appName %>/config"
-  "<%= appName %>/pkg/service/Cache"
-  "<%= appName %>/pkg/service/Mail"
   "<%= appName %>/pkg/database"
   "<%= appName %>/pkg/logging"
+  "<%= appName %>/pkg/service/Cache"
+  "<%= appName %>/pkg/service/Mail"
   "<%= appName %>/routers"
 )
 
@@ -22,6 +23,13 @@ import (
 // @in header
 // @name Authorization
 func main() {
+  viper.SetConfigName("config")
+  viper.AddConfigPath(".")
+  err := viper.ReadInConfig() // Find and read the config file
+  if err != nil { // Handle errors reading the config file
+    panic(fmt.Errorf("Fatal error config file: %s \n", err))
+  }
+
   config.Setup()
 
   database, closeDB := database.NewDB(*(*config.DatabaseSetting).Config)
@@ -39,13 +47,13 @@ func main() {
   config.SetupController(database, jwtManager, cacheManager, mailManager)
 
   gin.ForceConsoleColor()
-  gin.SetMode(config.ServerSetting.RunMode)
+  gin.SetMode(viper.GetString("app.runMode"))
 
   router := routers.InitRouter(jwtManager)
 
-  readTimeout := config.ServerSetting.ReadTimeout
-  writeTimeout := config.ServerSetting.WriteTimeout
-  endPoint := fmt.Sprintf(":%s", config.ServerSetting.HTTPPort)
+  readTimeout := viper.GetDuration("app.readTimeout")
+  writeTimeout := viper.GetDuration("app.writeTimeout")
+  endPoint := fmt.Sprintf(":%s", viper.GetString("app.port"))
   maxHeaderBytes := 1 << 20
 
   server := &http.Server{

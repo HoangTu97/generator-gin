@@ -8,7 +8,6 @@ import (
   "fmt"
   "io/ioutil"
   "net/http"
-  "os"
 )
 
 type vonageSmsRequestBody struct {
@@ -29,7 +28,7 @@ func NewVonage(apiKey, apiSecret string) *vonageSender {
 }
 
 func (s *vonageSender) Send(message SmsMessage.Message) {
-  body := SMSRequestBody{
+  body := vonageSmsRequestBody{
     APIKey:    s.apiKey,
     APISecret: s.apiSecret,
     To:        message.GetTo(),

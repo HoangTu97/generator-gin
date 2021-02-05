@@ -22,10 +22,10 @@ func NewSendgrid(username, apiKey string) *sendgridMailer {
 func (m *sendgridMailer) Send(message MailMessage.Message) {
   from := mail.NewEmail(m.username, m.username)
   subject := "REMINDER"
-  to := mail.NewEmail(message.GetTo(), message.GetTo())
-  message := mail.NewSingleEmail(from, subject, to, message.GetBody(), message.GetBody())
+  to := mail.NewEmail(message.GetTo()[0], message.GetTo()[0])
+  msgMail := mail.NewSingleEmail(from, subject, to, message.GetBody(), message.GetBody())
   client := sendgrid.NewSendClient(m.apiKey)
-  response, err := client.Send(message)
+  response, err := client.Send(msgMail)
   if err != nil {
     log.Println("sendgridMailer send error", err)
   } else {

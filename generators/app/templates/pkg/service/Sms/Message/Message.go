@@ -14,7 +14,7 @@ type Message interface {
 
 type message struct {
   from string
-  to []string
+  to   string
   text string
 }
 
@@ -50,5 +50,5 @@ func (m *message) GetText() string {
 }
 
 func (m *message) String() string {
-  return "Message{"+"'to':"+m.to[0]+"}"
+  return "Message{"+"'to':"+m.to+"}"
 }

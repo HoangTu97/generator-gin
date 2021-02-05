@@ -2,6 +2,8 @@ package Mail
 
 import (
   MailMailer "<%= appName %>/pkg/service/Mail/Mailer"
+
+  "github.com/spf13/viper"
 )
 
 type Manager interface {
@@ -41,7 +43,12 @@ func (m *manager) get(name string) Service {
 func (m *manager) resolve(name string) Mailer {
   switch name {
   case "smtp":
-    return MailMailer.NewSmtp("abc", "", "localhost", "8080")
+    return MailMailer.NewSmtp(
+      viper.GetString("mail.mailers.username"),
+      viper.GetString("mail.mailers.password"),
+      viper.GetString("mail.mailers.host"),
+      viper.GetString("mail.mailers.port"),
+    )
   case "ses":
     return MailMailer.NewSes("abc", "us-west-2")
   case "mailgun":
@@ -55,5 +62,5 @@ func (m *manager) resolve(name string) Mailer {
 }
 
 func (m *manager) getDefaultDriver() string {
-  return "mailgun"
+  return viper.GetString("mail.default")
 }

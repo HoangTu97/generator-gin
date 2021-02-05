@@ -1,0 +1,99 @@
+{
+  "app": {
+    "runMode": "debug",
+    "port": "<%= serverPort %>",
+    "key": "abc",
+    "cipher": "AES-256-CBC",
+    "readTimeout": 60,
+    "writeTimeout": 60,
+    "SSL": false,
+    "jwtSecretKey": "<%= appSecretKey %>",
+    "pageSize": 10
+  },
+  "log": {
+    "runtimeRootPath": "runtime/",
+    "savePath": "logs/",
+    "saveName": "log",
+    "fileExt": "log",
+    "timeFormat": "20060102"
+  },
+  "db": {
+    "default": "sqlite3",
+    "drivers": {
+      "sqlite3": {
+        "path": "./database/<%= appName %>.db"
+      },
+      "pgsql": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "<%= appName %>",
+        "username": "admin",
+        "password": "admin"
+      }
+    }
+  },
+  "cache": {
+    "default": "memcached",
+    "drivers": {
+      "memcached": {
+        "defaultExpiration": 300,
+        "purgeDuration": 600
+      },
+      "null": {},
+      "redis": {
+        "host": "localhost",
+        "port": 6379,
+        "password": "",
+        "maxIdle": 30,
+        "maxActive": 30,
+        "idleTimeout": -1
+      }
+    }
+  },
+  "mail": {
+    "default": "smtp",
+    "mailers": {
+      "smtp": {
+        "host": "smtp.mailgun.org",
+        "port": 587,
+        "username": "",
+        "password": ""
+      },
+      "mailgun": {
+      },
+      "postmark": {
+      },
+      "sendgrid": {
+      },
+      "ses": {
+      }
+    }
+  },
+  "sms": {
+    "default": "vonage",
+    "drivers": {
+      "vonage": {
+        "apiKey": "",
+        "apiSecret": ""
+      }
+    }
+  },
+  "hash": {
+    "default": "bcrypt",
+    "drivers": {
+      "bcrypt": {
+      }
+    }
+  },
+  "queue": {
+    "default": "null",
+    "drivers": {
+      "RabbitMQ": {
+        "host": "localhost",
+        "port": 5672,
+        "username": "",
+        "password": ""
+      }
+    }
+  }
+}

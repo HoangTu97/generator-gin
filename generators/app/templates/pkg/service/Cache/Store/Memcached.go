@@ -10,8 +10,8 @@ type memcachedStore struct {
   conn *cache.Cache
 }
 
-func NewMemcached() *memcachedStore {
-  conn := cache.New(5*time.Minute, 10*time.Minute)
+func NewMemcached(defaultExpiration, purgeDuration time.Duration) *memcachedStore {
+  conn := cache.New(defaultExpiration, purgeDuration)
   return &memcachedStore{conn: conn}
 }
 

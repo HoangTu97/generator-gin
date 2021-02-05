@@ -21,7 +21,7 @@ module.exports = class extends Generator {
         type: 'input',
         name: 'appSecretKey',
         message: 'Your JWT secret key?',
-        default: this.config.get("secretKey") || Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+        default: this.config.get("jwtSecretKey") || Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
       },
       {
         type: 'input',
@@ -55,7 +55,7 @@ module.exports = class extends Generator {
       yosay(`Saving config!`)
     );
     this.config.set("appName", this.props.appName)
-    this.config.set("secretKey", this.props.appSecretKey)
+    this.config.set("jwtSecretKey", this.props.appSecretKey)
     this.config.set("serverPort", this.props.serverPort)
     this.config.save();
   }
