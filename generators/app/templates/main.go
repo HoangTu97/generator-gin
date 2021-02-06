@@ -30,9 +30,7 @@ func main() {
     panic(fmt.Errorf("Fatal error config file: %s \n", err))
   }
 
-  config.Setup()
-
-  database, closeDB := database.NewDB(*(*config.DatabaseSetting).Config)
+  database, closeDB := database.NewDB()
   defer closeDB()
   database = config.SetupDB(database)
 
@@ -42,7 +40,7 @@ func main() {
   cacheManager := Cache.NewManager()
   mailManager := Mail.NewManager()
 
-  jwtManager := config.SetupJWT(*config.AppSetting)
+  jwtManager := config.SetupJWT()
 
   config.SetupController(database, jwtManager, cacheManager, mailManager)
 
@@ -66,8 +64,7 @@ func main() {
 
   log.Printf("[info] start http server listening %s", endPoint)
 
-  if config.ServerSetting.SSL {
-
+  if viper.GetBool("app.SSL") {
     SSLKeys := &struct {
       CERT string
       KEY  string

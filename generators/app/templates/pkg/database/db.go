@@ -7,24 +7,26 @@ import (
   "gorm.io/driver/postgres"
   "gorm.io/driver/sqlite"
   "gorm.io/gorm"
+  "github.com/spf13/viper"
 )
 
-func NewDB(config Config) (*gorm.DB, func()) {
+func NewDB() (*gorm.DB, func()) {
   var dialector gorm.Dialector
 
-  switch config.Type {
+  switch viper.GetString("db.default") {
   case "sqlite3":
-    dialector = sqlite.Open(config.Name)
+    dialector = sqlite.Open(viper.GetString("db.driver.sqlite3.path"))
   case "postgres":
     dialector = postgres.New(postgres.Config{
       DSN: fmt.Sprintf("host=%s user=%s password=%s dbname=%s ",
-        config.Host,
-        config.User,
-        config.Password,
-        config.Name),
+        viper.GetString("db.driver.pgsql.host"),
+        viper.GetString("db.driver.pgsql.username"),
+        viper.GetString("db.driver.pgsql.password"),
+        viper.GetString("db.driver.pgsql.database"),
+      ),
     })
   default:
-    log.Fatalln("NewDB -> config invalid -> ", config)
+    log.Fatalln("NewDB -> config invalid -> ", viper.GetString("db.default"))
   }
 
   db, err := gorm.Open(dialector, &gorm.Config{})

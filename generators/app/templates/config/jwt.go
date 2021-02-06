@@ -2,9 +2,10 @@ package config
 
 import (
   "<%= appName %>/helpers/jwt"
-  "<%= appName %>/helpers/setting"
+
+  "github.com/spf13/viper"
 )
 
-func SetupJWT(appSetting setting.App) jwt.JwtManager {
-  return jwt.NewJwtManager(appSetting)
+func SetupJWT() jwt.JwtManager {
+  return jwt.NewJwtManager(viper.GetString("app.jwtSecretKey"))
 }

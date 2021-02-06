@@ -2,7 +2,6 @@ package jwt
 
 import (
   "<%= appName %>/pkg/domain"
-  "<%= appName %>/helpers/setting"
   "<%= appName %>/pkg/util"
   "time"
 
@@ -19,9 +18,9 @@ type jwtManager struct {
 }
 
 // Setup Initialize the util
-func NewJwtManager(appSetting setting.App) JwtManager  {
+func NewJwtManager(jwtSecretKey string) JwtManager  {
   return &jwtManager{
-    jwtSecret: []byte(appSetting.JwtSecret),
+    jwtSecret: []byte(jwtSecretKey),
   }
 }
 
