@@ -235,14 +235,14 @@ module.exports = class extends Generator {
 
     var controllerDeclare;
     if (useServiceProxy === true) {
-      controllerDeclare= `${entityVar}Controller = controller.New${entityClass}(${entityVar}ServiceProxy)`;
+      controllerDeclare= `${entityVar}Controller := controller.New${entityClass}(${entityVar}ServiceProxy)`;
     } else {
-      controllerDeclare= `${entityVar}Controller = controller.New${entityClass}(${entityVar}Service)`;
+      controllerDeclare= `${entityVar}Controller := controller.New${entityClass}(${entityVar}Service)`;
     }
     file = this._insertLine(file, '// Controllers declare end : dont remove', controllerDeclare)
 
     var controllerGlobalDeclare = `${entityVar}Controller,`;
-    file = this._insertLine(file, '// Register controller declare end : dont remove', controllerGlobalDeclare);
+    file = this._insertLine(file, '// Register controller declare end : dont remove', controllerGlobalDeclare, '\n    ');
 
     this.fs.write(path, file);
   }
