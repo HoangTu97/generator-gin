@@ -109,7 +109,7 @@ module.exports = class extends Generator {
 
         var jsons = _.snakeCase(field.name);
         if (jsons !== '') {
-          field.jsonConfig = `json:"${jsons}"`
+          field.jsonConfig = `json:"${jsons},omitempty"`
         } else {
           field.jsonConfig = ''
         }
