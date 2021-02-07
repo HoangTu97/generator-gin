@@ -2,12 +2,12 @@
   "app": {
     "runMode": "debug",
     "port": "<%= serverPort %>",
-    "key": "abc",
+    "key": "<%= appSecretKey %>",
     "cipher": "AES-256-CBC",
     "readTimeout": 60,
     "writeTimeout": 60,
     "SSL": false,
-    "jwtSecretKey": "<%= appSecretKey %>",
+    "jwtSecretKey": "<%= jwtSecretKey %>",
     "pageSize": 10
   },
   "log": {
