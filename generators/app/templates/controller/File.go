@@ -7,12 +7,14 @@ import (
 
   "fmt"
   "io/ioutil"
+  "net/http"
 
   "github.com/gabriel-vasile/mimetype"
   "github.com/gin-gonic/gin"
 )
 
 type File interface {
+  GetRoutes() []RouteController
   Upload(c *gin.Context)
   Download(c *gin.Context)
   FileDisplay(c *gin.Context)
@@ -24,6 +26,14 @@ type file struct {
 
 func NewFile(service FileService.Service) File {
   return &file{service: service}
+}
+
+func (r *file) GetRoutes() []RouteController {
+  return []RouteController{
+    RouteController{Method:http.MethodPost,Path:"/api/public/file/upload",Handler:r.Upload},
+    RouteController{Method:http.MethodGet,Path:"/api/public/file/:id/download",Handler:r.Download},
+    RouteController{Method:http.MethodGet,Path:"/api/public/file/:id",Handler:r.FileDisplay},
+  }
 }
 
 // Upload upload file

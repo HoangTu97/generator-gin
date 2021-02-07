@@ -6,7 +6,7 @@ import (
   "<%= appName %>/pkg/service/Auth"
   "<%= appName %>/pkg/service/File"
   "<%= appName %>/pkg/service/Cache"
-  // "<%= appName %>/pkg/service/Mail"
+  "<%= appName %>/pkg/service/Mail"
   "<%= appName %>/pkg/service/Hash"
   // "<%= appName %>/pkg/service/Schedule"
   "<%= appName %>/repository/impl"

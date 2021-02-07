@@ -10,10 +10,13 @@ import (
   AuthService "<%= appName %>/pkg/service/Auth"
   "<%= appName %>/service"
 
+  "net/http"
+
   "github.com/gin-gonic/gin"
 )
 
 type Auth interface {
+  GetRoutes() []RouteController
   Register(c *gin.Context)
   Login(c *gin.Context)
   Logout(c *gin.Context)
@@ -27,6 +30,14 @@ type auth struct {
 
 func NewAuth(service AuthService.Service, userService service.User) Auth {
   return &auth{service: service, userService: userService}
+}
+
+func (r *auth) GetRoutes() []RouteController {
+  return []RouteController{
+    RouteController{Method:http.MethodPost,Path:"/api/public/auth/register",Handler:r.Register},
+    RouteController{Method:http.MethodPost,Path:"/api/public/auth/login",Handler:r.Login},
+    RouteController{Method:http.MethodGet,Path:"/private/auth/userinfo",Handler:r.UserInfo},
+  }
 }
 
 // Register register

@@ -13,9 +13,6 @@ import (
 )
 
 type User interface {
-  // Register(c *gin.Context)
-  // Login(c *gin.Context)
-  // UserInfo(c *gin.Context)
 }
 
 type user struct {
