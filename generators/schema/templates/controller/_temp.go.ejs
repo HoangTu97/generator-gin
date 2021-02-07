@@ -11,10 +11,13 @@ import (
   "<%= appName %>/pkg/converter"
   "<%= appName %>/service"
 
+  "net/http"
+
   "github.com/gin-gonic/gin"
 )
 
 type <%= entityClass %> interface {
+  GetRoutes() []RouteController
   GetAll(c *gin.Context)
   GetDetails(c *gin.Context)
   Create(c *gin.Context)
@@ -28,6 +31,16 @@ type <%= entityVar %> struct {
 
 func New<%= entityClass %>(service service.<%= entityClass %>) <%= entityClass %> {
   return &<%= entityVar %>{service: service}
+}
+
+func (r *<%= entityVar %>) GetRoutes() []RouteController {
+  return []RouteController{
+    {Method:http.MethodGet,Path:"/api/public/<%= entityVar %>",Handler:r.GetAll},
+    {Method:http.MethodGet,Path:"/api/public/<%= entityVar %>/:id",Handler:r.GetDetails},
+    {Method:http.MethodPost,Path:"/api/private/<%= entityVar %>",Handler:r.Create},
+    {Method:http.MethodPut,Path:"/api/private/<%= entityVar %>/:id",Handler:r.Update},
+    {Method:http.MethodDelete,Path:"/api/private/<%= entityVar %>/:id",Handler:r.Delete},
+  }
 }
 
 // <%= entityClass %> all

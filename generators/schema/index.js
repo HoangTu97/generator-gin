@@ -124,9 +124,6 @@ module.exports = class extends Generator {
       this._scafflodFiles(model.nameVar, model.nameClass, this.options.useRepoProxy, this.options.useServiceProxy, model.fields, model.relationships);
       this._registerController(model.nameVar, model.nameClass, this.options.useRepoProxy, this.options.useServiceProxy);
       this._registerEntityDB(model.nameVar, model.nameClass);
-      this._registerRoutesPrivate(model.nameVar, model.nameClass);
-      this._registerRoutesPublic(model.nameVar, model.nameClass);
-      // this._registerSecurity(model.nameVar, model.nameClass);
     }
   }
 
@@ -212,9 +209,6 @@ module.exports = class extends Generator {
     var path = this.destinationPath(`config/controller.go`);
     var file = this.fs.read(path);
 
-    var controllerGlobalDeclare = `${entityClass}Controller controller.${entityClass}`;
-    file = this._insertLine(file, '// Controllers globale declare end : dont remove', controllerGlobalDeclare);
-
     var mapperDeclare = `${entityVar}Mapper := mapper_impl.New${entityClass}()`;
     file = this._insertLine(file, '// Mappers declare end : dont remove', mapperDeclare)
 
@@ -241,11 +235,14 @@ module.exports = class extends Generator {
 
     var controllerDeclare;
     if (useServiceProxy === true) {
-      controllerDeclare= `${entityClass}Controller = controller.New${entityClass}(${entityVar}ServiceProxy)`;
+      controllerDeclare= `${entityVar}Controller = controller.New${entityClass}(${entityVar}ServiceProxy)`;
     } else {
-      controllerDeclare= `${entityClass}Controller = controller.New${entityClass}(${entityVar}Service)`;
+      controllerDeclare= `${entityVar}Controller = controller.New${entityClass}(${entityVar}Service)`;
     }
     file = this._insertLine(file, '// Controllers declare end : dont remove', controllerDeclare)
+
+    var controllerGlobalDeclare = `${entityVar}Controller,`;
+    file = this._insertLine(file, '// Register controller declare end : dont remove', controllerGlobalDeclare);
 
     this.fs.write(path, file);
   }
@@ -269,48 +266,6 @@ module.exports = class extends Generator {
     var modelDeclare = `&models.${entityClass}{},`;
 
     file = this._insertLine(file, '// Models declare end : dont remove', modelDeclare, '\n    ')
-
-    this.fs.write(path, file);
-  }
-
-  _registerRoutesPrivate(entityVar, entityClass) {
-    var path = this.destinationPath(`routers/api.private.go`);
-    var file = this.fs.read(path);
-
-    var apiDeclare = `{
-    private${entityClass}Routes := privateRoutes.Group("/${entityVar}")
-    private${entityClass}Routes.POST("", config.${entityClass}Controller.Create)
-    private${entityClass}Routes.PUT("/:id", config.${entityClass}Controller.Update)
-    private${entityClass}Routes.DELETE("/:id", config.${entityClass}Controller.Delete)
-  }`;
-
-    file = this._insertLine(file, '// Api declare end : dont remove', apiDeclare)
-
-    this.fs.write(path, file);
-  }
-
-  _registerRoutesPublic(entityVar, entityClass) {
-    var path = this.destinationPath(`routers/api.public.go`);
-    var file = this.fs.read(path);
-
-    var apiDeclare = `{
-    public${entityClass}Routes := publicRoutes.Group("/${entityVar}")
-    public${entityClass}Routes.GET("", config.${entityClass}Controller.GetAll)
-    public${entityClass}Routes.GET("/:id", config.${entityClass}Controller.GetDetails)
-  }`;
-
-    file = this._insertLine(file, '// Api declare end : dont remove', apiDeclare)
-
-    this.fs.write(path, file);
-  }
-
-  _registerSecurity(entityVar, entityClass) {
-    var path = this.destinationPath(`middlewares/security.go`);
-    var file = this.fs.read(path);
-
-    var securityDeclare = `accessibleRoles["/api/private/${entityVar}.*"] = []string{constants.ROLE.ADMIN}`;
-
-    file = this._insertLine(file, '// Security declare end : dont remove', securityDeclare)
 
     this.fs.write(path, file);
   }

@@ -34,9 +34,9 @@ func NewAuth(service AuthService.Service, userService service.User) Auth {
 
 func (r *auth) GetRoutes() []RouteController {
   return []RouteController{
-    RouteController{Method:http.MethodPost,Path:"/api/public/auth/register",Handler:r.Register},
-    RouteController{Method:http.MethodPost,Path:"/api/public/auth/login",Handler:r.Login},
-    RouteController{Method:http.MethodGet,Path:"/private/auth/userinfo",Handler:r.UserInfo},
+    {Method:http.MethodPost,Path:"/api/public/auth/register",Handler:r.Register},
+    {Method:http.MethodPost,Path:"/api/public/auth/login",Handler:r.Login},
+    {Method:http.MethodGet,Path:"/private/auth/userinfo",Handler:r.UserInfo},
   }
 }
 

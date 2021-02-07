@@ -30,9 +30,9 @@ func NewFile(service FileService.Service) File {
 
 func (r *file) GetRoutes() []RouteController {
   return []RouteController{
-    RouteController{Method:http.MethodPost,Path:"/api/public/file/upload",Handler:r.Upload},
-    RouteController{Method:http.MethodGet,Path:"/api/public/file/:id/download",Handler:r.Download},
-    RouteController{Method:http.MethodGet,Path:"/api/public/file/:id",Handler:r.FileDisplay},
+    {Method:http.MethodPost,Path:"/api/public/file/upload",Handler:r.Upload},
+    {Method:http.MethodGet,Path:"/api/public/file/:id/download",Handler:r.Download},
+    {Method:http.MethodGet,Path:"/api/public/file/:id",Handler:r.FileDisplay},
   }
 }
 
