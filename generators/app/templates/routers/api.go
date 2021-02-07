@@ -1,15 +1,14 @@
 package routers
 
 import (
-  "<%= appName %>/config"
   "<%= appName %>/controller"
 
   "github.com/gin-gonic/gin"
 )
 
 // InitRouterApi InitRouterApi
-func InitRouterApi(r *gin.Engine) {
-  for _, controller := range config.Controllers {
+func InitRouterApi(r *gin.Engine, controllers []controller.Base) {
+  for _, controller := range controllers {
     registerController(r, controller)
   }
 }

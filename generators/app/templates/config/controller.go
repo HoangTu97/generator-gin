@@ -18,16 +18,12 @@ import (
   "gorm.io/gorm"
 )
 
-var (
-  Controllers []controller.Base
-)
-
 func SetupController(
   db *gorm.DB, 
   jwtManager jwt.JwtManager,
   cacheManager Cache.Manager,
   mailManager Mail.Manager,
-) {
+) []controller.Base {
   // Mappers declare
   userMapper := mapper_impl.NewUser()
   // Mappers declare end : dont remove
@@ -55,12 +51,12 @@ func SetupController(
   // Proxy Services declare end : dont remove
 
   // Controllers declare
-  fileController = controller.NewFile(fileService)
-  authController = controller.NewAuth(authService, userServiceProxy)
-  userController = controller.NewUser(userServiceProxy)
+  fileController := controller.NewFile(fileService)
+  authController := controller.NewAuth(authService, userServiceProxy)
+  userController := controller.NewUser(userServiceProxy)
   // Controllers declare end : dont remove
 
-  Controllers = []controller.Base{
+  return []controller.Base{
     // Register controller declare
     fileController,
     authController,

@@ -4,6 +4,7 @@ import (
   _ "<%= appName %>/docs"
   "<%= appName %>/helpers/jwt"
   "<%= appName %>/middlewares"
+  "<%= appName %>/controller"
 
   // "github.com/gin-gonic/contrib/static"
   "github.com/gin-gonic/gin"
@@ -12,7 +13,7 @@ import (
 )
 
 // InitRouter initialize routing information
-func InitRouter(jwtManager jwt.JwtManager) *gin.Engine {
+func InitRouter(jwtManager jwt.JwtManager, controllers []controller.Base) *gin.Engine {
   r := gin.New()
   r.Use(gin.Logger())
   r.Use(gin.Recovery())
@@ -24,7 +25,7 @@ func InitRouter(jwtManager jwt.JwtManager) *gin.Engine {
 
   r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-  InitRouterApi(r)
+  InitRouterApi(r, controllers)
 
   return r
 }

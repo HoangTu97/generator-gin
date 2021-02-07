@@ -42,12 +42,12 @@ func main() {
 
   jwtManager := config.SetupJWT()
 
-  config.SetupController(database, jwtManager, cacheManager, mailManager)
+  controllers := config.SetupController(database, jwtManager, cacheManager, mailManager)
 
   gin.ForceConsoleColor()
   gin.SetMode(viper.GetString("app.runMode"))
 
-  router := routers.InitRouter(jwtManager)
+  router := routers.InitRouter(jwtManager, controllers)
 
   readTimeout := viper.GetDuration("app.readTimeout")
   writeTimeout := viper.GetDuration("app.writeTimeout")
