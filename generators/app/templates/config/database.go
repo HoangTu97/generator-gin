@@ -8,10 +8,6 @@ import (
   "<%= appName %>/models"
 )
 
-type DB interface {
-  AutoMigrate(dst ...interface{}) error
-}
-
 // Setup initializes the database instance
 func SetupDB(db *gorm.DB) *gorm.DB {
   sqlDB, errSqlDB := db.DB()
