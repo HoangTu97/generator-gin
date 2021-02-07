@@ -47,19 +47,3 @@ func (dto *UserDTO) GetRolesStr() []string {
 
   return arr
 }
-
-// func (dto *UserDTO) UnmarshalJSON(data []byte) error {
-// 	var v map[string]string
-// 	err := json.Unmarshal(data, &v)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	roles := []int(v["roles"])
-// 	dto.Roles = make([]domain.UserRole, len(roles))
-// 	for i, role := range roles {
-// 		dto.Roles[i] = domain.UserRole(role)
-// 	}
-
-// 	return nil
-// }
