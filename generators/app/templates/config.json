@@ -85,6 +85,10 @@
       }
     }
   },
+  "fcm": {
+    "apiKey": "AIza...",
+    "parentId": "abc"
+  },
   "queue": {
     "default": "null",
     "drivers": {
