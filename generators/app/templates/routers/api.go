@@ -9,13 +9,12 @@ import (
 
 // InitRouterApi InitRouterApi
 func InitRouterApi(r *gin.Engine) {
-  // Api declare
-  registerController(r, config.AuthController)
-  registerController(r, config.FileController)
-  // Api declare end : dont remove
+  for _, controller := range config.Controllers {
+    registerController(r, controller)
+  }
 }
 
-func registerController(r *gin.Engine, baseController controller.BaseController) {
+func registerController(r *gin.Engine, baseController controller.Base) {
   for _, route := range baseController.GetRoutes() {
     r.Handle(route.Method, route.Path, route.Handler)
   }

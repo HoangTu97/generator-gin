@@ -13,6 +13,7 @@ import (
 )
 
 type User interface {
+  GetRoutes() []RouteController
 }
 
 type user struct {
@@ -21,4 +22,8 @@ type user struct {
 
 func NewUser(service service.User) User {
   return &user{service: service}
+}
+
+func (r *user) GetRoutes() []RouteController {
+  return []RouteController{}
 }
