@@ -6,7 +6,7 @@ import (
   "<%= appName %>/pkg/service/Auth"
   "<%= appName %>/pkg/service/File"
   "<%= appName %>/pkg/service/Cache"
-  "<%= appName %>/pkg/service/Mail"
+  // "<%= appName %>/pkg/service/Mail"
   "<%= appName %>/pkg/service/Hash"
   // "<%= appName %>/pkg/service/Schedule"
   "<%= appName %>/repository/impl"
@@ -47,7 +47,7 @@ func SetupController(
   // Services declare
   cacheService := cacheManager.Driver("Memcached")
   fileService := File.NewService()
-  mailService := mailManager.Mailer("smtp")
+  // mailService := mailManager.Mailer("smtp")
   hashService := Hash.NewService("")
   // scheduleService := Schedule.NewService()
   authService := Auth.NewService(jwtManager)
@@ -63,8 +63,4 @@ func SetupController(
   AuthController = controller.NewAuth(authService, userServiceProxy)
   UserController = controller.NewUser(userServiceProxy)
   // Controllers declare end : dont remove
-
-  message := mailService.NewMessage()
-  message.To([]string{"abc"})
-  mailService.Send(message)
 }
