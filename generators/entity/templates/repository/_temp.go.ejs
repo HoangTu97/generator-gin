@@ -6,9 +6,9 @@ import (
   "<%= appName %>/models"
 )
 
-type <%= entityCap %> interface {
-  Save(<%= entityLower %> models.<%= entityCap %>) (models.<%= entityCap %>, error)
-  FindOne(id uint) (models.<%= entityCap %>, error)
+type <%= entityClass %> interface {
+  Save(<%= entityVar %> models.<%= entityClass %>) (models.<%= entityClass %>, error)
+  FindOne(id uint) (models.<%= entityClass %>, error)
   FindPage(pageable pagination.Pageable) page.Page
   Delete(id uint)
 }

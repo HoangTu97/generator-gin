@@ -1,0 +1,168 @@
+package controller
+
+import (
+  "<%= appName %>/dto"
+  "<%= appName %>/dto/request"
+  <%= entityClass %>Request "<%= appName %>/dto/request/<%= entityVar %>"
+  "<%= appName %>/dto/response"
+  <%= entityClass %>Response "<%= appName %>/dto/response/<%= entityVar %>"
+  "<%= appName %>/helpers/constants"
+  "<%= appName %>/helpers/pagination"
+  "<%= appName %>/pkg/converter"
+  "<%= appName %>/service"
+
+  "net/http"
+
+  "github.com/gin-gonic/gin"
+)
+
+type <%= entityClass %> interface {
+  GetRoutes() []RouteController
+  GetAll(c *gin.Context)
+  GetDetails(c *gin.Context)
+  Create(c *gin.Context)
+  Update(c *gin.Context)
+  Delete(c *gin.Context)
+}
+
+type <%= entityVar %> struct {
+  service service.<%= entityClass %>
+}
+
+func New<%= entityClass %>(service service.<%= entityClass %>) <%= entityClass %> {
+  return &<%= entityVar %>{service: service}
+}
+
+func (r *<%= entityVar %>) GetRoutes() []RouteController {
+  return []RouteController{
+    {Method:http.MethodGet,Path:"/api/public/<%= entityVar %>",Handler:r.GetAll},
+    {Method:http.MethodGet,Path:"/api/public/<%= entityVar %>/:id",Handler:r.GetDetails},
+    {Method:http.MethodPost,Path:"/api/private/<%= entityVar %>",Handler:r.Create},
+    {Method:http.MethodPut,Path:"/api/private/<%= entityVar %>/:id",Handler:r.Update},
+    {Method:http.MethodDelete,Path:"/api/private/<%= entityVar %>/:id",Handler:r.Delete},
+  }
+}
+
+// <%= entityClass %> all
+// @Summary GetAll
+// @Tags Public<%= entityClass %>
+// @Accept json
+// @Param page query int false "page"
+// @Param size query int false "size"
+// @Success 200 {object} response.APIResponseDTO{data=<%= entityClass %>Response.ListResponseDTO} "desc"
+// @Router /api/public/<%= entityVar %> [get]
+func (r *<%= entityVar %>) GetAll(c *gin.Context) {
+  pageable := pagination.GetPage(c)
+
+  page := r.service.FindPage(pageable)
+
+  response.CreateSuccesResponse(c, <%= entityClass %>Response.CreateListResponseDTOFromPage(page))
+}
+
+// <%= entityClass %> details
+// @Summary GetDetails
+// @Tags Public<%= entityClass %>
+// @Accept json
+// @Param id path int true "<%= entityClass %> ID"
+// @Success 200 {object} response.APIResponseDTO{data=dto.<%= entityClass %>DTO} "desc"
+// @Router /api/public/<%= entityVar %>/{id} [get]
+func (r *<%= entityVar %>) GetDetails(c *gin.Context) {
+  id := converter.MustUint(c.Param("id"))
+  
+  <%= entityVar %>DTO, success := r.service.FindOne(id)
+  if !success {
+    response.CreateErrorResponse(c, constants.ErrorStringApi.INTERNAL_ERROR)
+    return
+  }
+
+  response.CreateSuccesResponse(c, <%= entityVar %>DTO)
+}
+
+// <%= entityClass %> create
+// @Summary Create
+// @Tags Private<%= entityClass %>
+// @Accept json
+// @Security ApiKeyAuth
+// @Param body body <%= entityClass %>Request.CreateRequestDTO true "body"
+// @Success 200 {object} response.APIResponseDTO "desc"
+// @Router /api/private/<%= entityVar %> [post]
+func (r *<%= entityVar %>) Create(c *gin.Context) {
+  var success bool
+
+  var requestDTO <%= entityClass %>Request.CreateRequestDTO
+  err := request.BindAndValid(c, &requestDTO)
+  if err != nil {
+    response.CreateErrorResponse(c, err.Error())
+    return
+  }
+
+  <%= entityVar %>DTO := dto.<%= entityClass %>DTO{<% fields.forEach(function(field){ %>
+    <%= field.name %>: requestDTO.<%= field.name %>,<% }); %>
+  }
+
+  _, success = r.service.Save(<%= entityVar %>DTO)
+  if !success {
+    response.CreateErrorResponse(c, constants.ErrorStringApi.INTERNAL_ERROR)
+    return
+  }
+
+  response.CreateSuccesResponse(c, nil)
+}
+
+// <%= entityClass %> update
+// @Summary Update
+// @Tags Private<%= entityClass %>
+// @Accept json
+// @Security ApiKeyAuth
+// @Param id path int true "<%= entityClass %> ID"
+// @Param body body <%= entityClass %>Request.CreateRequestDTO true "body"
+// @Success 200 {object} response.APIResponseDTO "desc"
+// @Router /api/private/<%= entityVar %>/{id} [put]
+func (r *<%= entityVar %>) Update(c *gin.Context) {
+  id := converter.MustUint(c.Param("id"))
+
+  var requestDTO <%= entityClass %>Request.UpdateRequestDTO
+  err := request.BindAndValid(c, &requestDTO)
+  if err != nil {
+    response.CreateErrorResponse(c, err.Error())
+    return
+  }
+
+  var success bool
+  <%= entityVar %>DTO, success := r.service.FindOne(id)
+  if !success {
+    response.CreateErrorResponse(c, constants.ErrorStringApi.INTERNAL_ERROR)
+    return
+  }
+<% fields.forEach(function(field){ %>
+  <%= entityVar %>DTO.<%= field.name %> = requestDTO.<%= field.name %><% }); %>
+
+  _, success = r.service.Save(<%= entityVar %>DTO)
+  if !success {
+    response.CreateErrorResponse(c, constants.ErrorStringApi.INTERNAL_ERROR)
+    return
+  }
+
+  response.CreateSuccesResponse(c, nil)
+}
+
+// <%= entityClass %> delete
+// @Summary Delete
+// @Tags Private<%= entityClass %>
+// @Accept json
+// @Security ApiKeyAuth
+// @Param id path int true "<%= entityClass %> ID"
+// @Success 200 {object} response.APIResponseDTO "desc"
+// @Router /api/private/<%= entityVar %>/{id} [delete]
+func (r *<%= entityVar %>) Delete(c *gin.Context) {
+  id := converter.MustUint(c.Param("id"))
+
+  _, found := r.service.FindOne(id)
+  if !found {
+    response.CreateErrorResponse(c, constants.ErrorStringApi.INVALID_REQUEST)
+    return
+  }
+
+  r.service.Delete(id)
+  response.CreateSuccesResponse(c, nil)
+}

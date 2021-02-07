@@ -1,4 +1,4 @@
-package <%= entityCap %>Response
+package <%= entityClass %>Response
 
 import (
   "<%= appName %>/helpers/page"
@@ -14,16 +14,21 @@ type ListResponseDTO struct {
 // ListItemResponseDTO godoc
 type ListItemResponseDTO struct {
   ID uint `json:"id"`
+<% fields.forEach(function(field){ %>
+  <%= field.name %> <%= field.type %> <% if (field.jsonConfig !== '') {%>`<%- field.jsonConfig %>`<%}%><% }); %>
 }
 
-// CreateListResponseDTOFromPage create page from page models.<%= entityCap %>
+// CreateListResponseDTOFromPage create page from page models.<%= entityClass %>
 func CreateListResponseDTOFromPage(page page.Page) *ListResponseDTO {
   result := make([]ListItemResponseDTO, page.GetTotalElements())
   for i, v := range page.GetContent() {
-    entity := v.(models.<%= entityCap %>)
+    entity := v.(models.<%= entityClass %>)
 
     result[i] = ListItemResponseDTO{
       ID: entity.ID,
+      // Auto-gen fields<% fields.forEach(function(field){ %>
+      <%= field.name %>: entity.<%= field.name %>,<% }); %>
+      // Auto-gen fields : dont remove
     }
   }
   return &ListResponseDTO{

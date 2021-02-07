@@ -6,9 +6,9 @@ import (
   "<%= appName %>/helpers/pagination"
 )
 
-type <%= entityCap %> interface {
-  Save(<%= entityLower %>DTO dto.<%= entityCap %>DTO) (dto.<%= entityCap %>DTO, bool)
-  FindOne(id uint) (dto.<%= entityCap %>DTO, bool)
+type <%= entityClass %> interface {
+  Save(<%= entityVar %>DTO dto.<%= entityClass %>DTO) (dto.<%= entityClass %>DTO, bool)
+  FindOne(id uint) (dto.<%= entityClass %>DTO, bool)
   FindPage(pageable pagination.Pageable) page.Page
   Delete(id uint)
 }
