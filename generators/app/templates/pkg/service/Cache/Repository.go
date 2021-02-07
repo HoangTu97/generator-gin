@@ -20,8 +20,6 @@ type Repository interface {
   Decrement1(key string) bool
   Forever(key string, value interface{}) bool
   Forget(key string) bool
-
-  // GetStore() Store
 }
 
 type repository struct {
@@ -126,7 +124,3 @@ func (r *repository) Forever(key string, value interface{}) bool {
 func (r *repository) Forget(key string) bool {
   return r.store.Forget(key)
 }
-
-// func (r *repository) GetStore() Store {
-//   return r.store
-// }
