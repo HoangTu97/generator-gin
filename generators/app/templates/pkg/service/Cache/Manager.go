@@ -3,6 +3,7 @@ package Cache
 import (
   "<%= appName %>/pkg/service/Cache/Store"
 
+  "time"
   "fmt"
 
   "github.com/spf13/viper"
@@ -53,8 +54,8 @@ func (m *manager) resolve(name string) Repository {
   //   return m.repository(CacheStore.NewFile())
   case "memcached":
     return m.repository(CacheStore.NewMemcached(
-      viper.GetDuration("cache.drivers.memcached.defaultExpiration"),
-      viper.GetDuration("cache.drivers.memcached.purgeDuration"),
+      viper.GetDuration("cache.drivers.memcached.defaultExpiration")*time.Second,
+      viper.GetDuration("cache.drivers.memcached.purgeDuration")*time.Second,
     ))
   case "null":
     return m.repository(CacheStore.NewNull())
@@ -64,7 +65,7 @@ func (m *manager) resolve(name string) Repository {
       viper.GetString("cache.drivers.redis.port"),
       viper.GetInt("cache.drivers.redis.maxIdle"),
       viper.GetInt("cache.drivers.redis.maxActive"),
-      viper.GetDuration("cache.drivers.redis.idleTimeout"),
+      viper.GetDuration("cache.drivers.redis.idleTimeout")*time.Second,
     ))
   // case "Database":
   //   return m.repository(CacheStore.NewDatabase())

@@ -4,10 +4,10 @@ import (
   "fmt"
   "log"
 
+  "github.com/spf13/viper"
   "gorm.io/driver/postgres"
   "gorm.io/driver/sqlite"
   "gorm.io/gorm"
-  "github.com/spf13/viper"
 )
 
 func NewDB() (*gorm.DB, func()) {

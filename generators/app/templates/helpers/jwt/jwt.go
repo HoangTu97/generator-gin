@@ -18,7 +18,7 @@ type jwtManager struct {
 }
 
 // Setup Initialize the util
-func NewJwtManager(jwtSecretKey string) JwtManager  {
+func NewJwtManager(jwtSecretKey string) JwtManager {
   return &jwtManager{
     jwtSecret: []byte(jwtSecretKey),
   }

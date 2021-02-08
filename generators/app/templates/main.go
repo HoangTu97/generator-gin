@@ -1,6 +1,7 @@
 package main
 
 import (
+  "time"
   "fmt"
   "log"
   "net/http"
@@ -49,8 +50,8 @@ func main() {
 
   router := routers.InitRouter(jwtManager, controllers)
 
-  readTimeout := viper.GetDuration("app.readTimeout")
-  writeTimeout := viper.GetDuration("app.writeTimeout")
+  readTimeout := viper.GetDuration("app.readTimeout")*time.Second
+  writeTimeout := viper.GetDuration("app.writeTimeout")*time.Second
   endPoint := fmt.Sprintf(":%s", viper.GetString("app.port"))
   maxHeaderBytes := 1 << 20
 
