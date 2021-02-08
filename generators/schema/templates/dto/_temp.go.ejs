@@ -7,10 +7,10 @@ import (
 
 // <%= entityClass %>DTO godoc
 type <%= entityClass %>DTO struct {
-  ID uint
-  CreatedAt time.Time
-  UpdatedAt time.Time
-  DeletedAt gorm.DeletedAt
+  ID uint `json:"id,omitempty"`
+  CreatedAt time.Time `json:"createdAt,omitempty"`
+  UpdatedAt time.Time `json:"updatedAt,omitempty"`
+  DeletedAt gorm.DeletedAt `json:"deletedAt,omitempty"`
 <% fields.forEach(function(field){ %>
   <%= field.name %> <%= field.type %> <% if (field.jsonConfig !== '') {%>`<%- field.jsonConfig %>`<%}%><% }); %>
 }
