@@ -2,6 +2,7 @@ package dto
 
 import (
   "time"
+  "gorm.io/gorm"
 )
 
 // <%= entityClass %>DTO godoc
@@ -9,7 +10,7 @@ type <%= entityClass %>DTO struct {
   ID uint
   CreatedAt time.Time
   UpdatedAt time.Time
-  DeletedAt *time.Time
+  DeletedAt gorm.DeletedAt
 <% fields.forEach(function(field){ %>
   <%= field.name %> <%= field.type %> <% if (field.jsonConfig !== '') {%>`<%- field.jsonConfig %>`<%}%><% }); %>
 }

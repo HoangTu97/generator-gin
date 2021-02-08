@@ -15,9 +15,10 @@ func New<%= entityClass %>() mapper.<%= entityClass %> {
 
 func (m *<%= entityVar %>) ToDTO(entity models.<%= entityClass %>) dto.<%= entityClass %>DTO {
   return dto.<%= entityClass %>DTO{
-    ID:          entity.Model.ID,
-    CreatedAt:   entity.Model.CreatedAt,
-    UpdatedAt:   entity.Model.UpdatedAt,
+    ID:        entity.Model.ID,
+    CreatedAt: entity.Model.CreatedAt,
+    UpdatedAt: entity.Model.UpdatedAt,
+    DeletedAt: entity.Model.DeletedAt,
 <% fields.forEach(function(field){ %>
     <%= field.name %>: entity.<%= field.name %>,<% }); %>
   }
@@ -26,9 +27,10 @@ func (m *<%= entityVar %>) ToDTO(entity models.<%= entityClass %>) dto.<%= entit
 func (m *<%= entityVar %>) ToEntity(dto dto.<%= entityClass %>DTO) models.<%= entityClass %> {
   return models.<%= entityClass %>{
     Model: gorm.Model{
-      ID:          dto.ID,
-      CreatedAt:   dto.CreatedAt,
-      UpdatedAt:   dto.UpdatedAt,
+      ID:        dto.ID,
+      CreatedAt: dto.CreatedAt,
+      UpdatedAt: dto.UpdatedAt,
+      DeletedAt: dto.DeletedAt,
     },
 <% fields.forEach(function(field){ %>
     <%= field.name %>: dto.<%= field.name %>,<% }); %>
