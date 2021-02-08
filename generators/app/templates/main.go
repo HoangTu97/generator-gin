@@ -20,6 +20,7 @@ import (
 // @title <%= appName %> API
 // @version 1.0
 // @description An example of gin
+// @host localhost:<%= serverPort %>
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
