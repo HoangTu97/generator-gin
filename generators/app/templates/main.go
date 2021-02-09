@@ -36,9 +36,6 @@ func main() {
   defer closeDB()
   database = config.SetupDB(database)
 
-  // logging.NewLogger(*config.LoggerSetting)
-  logging.NewZeroLog()
-
   cacheManager := Cache.NewManager()
   mailManager := Mail.NewManager()
 

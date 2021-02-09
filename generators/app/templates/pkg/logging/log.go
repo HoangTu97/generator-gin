@@ -2,10 +2,13 @@ package logging
 
 import (
   "<%= appName %>/helpers/file"
+
   "fmt"
   "log"
   "path/filepath"
   "runtime"
+
+  "github.com/spf13/viper"
 )
 
 type Level int
@@ -38,17 +41,20 @@ type logger struct {
   logger *log.Logger
 }
 
-func NewLogger(config Config) Logger {
-  filePath := getLogFilePath(config.RuntimeRootPath, config.LogSavePath)
-  fileName := getLogFileName(config.LogSaveName, config.TimeFormat, config.LogFileExt)
+func NewLogger() Logger {
+  filePath := getLogFilePath(viper.GetString("log.runtimeRootPath"), viper.GetString("log.savePath"))
+  fileName := getLogFileName(viper.GetString("log.saveName"), viper.GetString("log.timeFormat"), viper.GetString("log.fileExt"))
   file, err := file.MustOpen(fileName, filePath)
   if err != nil {
     log.Fatalf("logging.Setup err: %v", err)
   }
 
-  log := log.New(file, DefaultPrefix, log.LstdFlags)
+  wrt := io.MultiWriter(os.Stdout, file)
+  log.SetOutput(wrt)
 
-  return &logger{ logger: log }
+  logger := log.New(file, DefaultPrefix, log.LstdFlags)
+
+  return &logger{ logger: logger }
 }
 
 // Debug output logs at debug level
