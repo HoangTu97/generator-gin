@@ -10,9 +10,8 @@ import (
   "github.com/gin-gonic/gin"
 
   "<%= appName %>/config"
-  "<%= appName %>/pkg/database"
-  "<%= appName %>/pkg/logging"
   "<%= appName %>/pkg/service/Cache"
+  "<%= appName %>/pkg/service/Database"
   "<%= appName %>/pkg/service/Mail"
   "<%= appName %>/routers"
 )
@@ -32,16 +31,18 @@ func main() {
     panic(fmt.Errorf("Fatal error config file: %s \n", err))
   }
 
-  database, closeDB := database.NewDB()
-  defer closeDB()
-  database = config.SetupDB(database)
+  dbManager := Database.NewManager()
+  defer dbManager.Shutdown()
+  models := config.GetModelsNeedMigrate()
+  dbManager.Connection("")
+  dbManager.Migrate("", models)
 
   cacheManager := Cache.NewManager()
   mailManager := Mail.NewManager()
 
   jwtManager := config.SetupJWT()
 
-  controllers := config.SetupController(database, jwtManager, cacheManager, mailManager)
+  controllers := config.SetupController(dbManager, jwtManager, cacheManager, mailManager)
 
   gin.ForceConsoleColor()
   gin.SetMode(viper.GetString("app.runMode"))

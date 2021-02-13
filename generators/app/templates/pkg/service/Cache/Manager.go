@@ -5,6 +5,7 @@ import (
 
   "time"
   "fmt"
+  "log"
 
   "github.com/spf13/viper"
 )
@@ -39,6 +40,7 @@ func (m *manager) Driver(name string) Service {
 
 func (m *manager) get(name string) Service {
   if m.stores[name] == nil {
+    log.Printf("Connecting Cache %s", name)
     return NewService(m.resolve(name))
   }
   return m.stores[name]

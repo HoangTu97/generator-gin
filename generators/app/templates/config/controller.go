@@ -4,6 +4,7 @@ import (
   "<%= appName %>/controller"
   "<%= appName %>/helpers/jwt"
   "<%= appName %>/pkg/service/Auth"
+  "<%= appName %>/pkg/service/Database"
   "<%= appName %>/pkg/service/File"
   "<%= appName %>/pkg/service/Cache"
   "<%= appName %>/pkg/service/Mail"
@@ -14,16 +15,16 @@ import (
   "<%= appName %>/service/impl"
   "<%= appName %>/service/proxy"
   "<%= appName %>/service/mapper/impl"
-
-  "gorm.io/gorm"
 )
 
 func SetupController(
-  db *gorm.DB, 
+  dbManager Database.Manager, 
   jwtManager jwt.JwtManager,
   cacheManager Cache.Manager,
   mailManager Mail.Manager,
 ) []controller.Base {
+  db := dbManager.Connection("")
+
   // Mappers declare
   userMapper := mapper_impl.NewUser()
   // Mappers declare end : dont remove

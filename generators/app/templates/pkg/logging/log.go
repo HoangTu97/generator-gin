@@ -49,12 +49,12 @@ func NewLogger() Logger {
     log.Fatalf("logging.Setup err: %v", err)
   }
 
-  wrt := io.MultiWriter(os.Stdout, file)
-  log.SetOutput(wrt)
+  // wrt := io.MultiWriter(os.Stdout, file)
+  // log.SetOutput(wrt)
 
-  logger := log.New(file, DefaultPrefix, log.LstdFlags)
+  loggerr := log.New(file, DefaultPrefix, log.LstdFlags)
 
-  return &logger{ logger: logger }
+  return &logger{ logger: loggerr }
 }
 
 // Debug output logs at debug level

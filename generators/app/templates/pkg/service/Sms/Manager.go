@@ -2,6 +2,10 @@ package Sms
 
 import (
   SmsSender "<%= appName %>/pkg/service/Sms/Sender"
+
+  "log"
+
+  "github.com/spf13/viper"
 )
 
 type Manager interface {
@@ -28,6 +32,7 @@ func (m *manager) Driver(name string) Service {
 
 func (m *manager) get(name string) Service {
   if m.senders[name] == nil {
+    log.Printf("Connecting Mailer %s", name)
     return NewService(m.resolve(name))
   }
   return m.senders[name]
@@ -36,11 +41,14 @@ func (m *manager) get(name string) Service {
 func (m *manager) resolve(name string) Sender {
   switch name {
   case "vonage":
-    return SmsSender.NewVonage("VONAGE_API_KEY", "VONAGE_API_SECRET")
+    return SmsSender.NewVonage(
+      viper.GetString("sms.drivers.vonage.apiKey"),
+      viper.GetString("sms.drivers.vonage.apiSecret"),
+    )
   }
   return nil
 }
 
 func (m *manager) getDefaultDriver() string {
-  return "vonage"
+  return viper.GetString("sms.default")
 }

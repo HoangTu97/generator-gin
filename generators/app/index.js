@@ -10,36 +10,56 @@ module.exports = class extends Generator {
       yosay(`Welcome to the fine ${chalk.red("generator-gin")} generator!`)
     );
 
-    const prompts = [
-      {
+    const prompts = [];
+
+    if (this.config.get("appName") === undefined) {
+      prompts.push({
         type: "input",
         name: "appName",
         message: "Your project name?",
-        default: this.config.get("appName") || this.appname
-      },
-      {
+        default: this.appname
+      })
+    }
+    if (this.config.get("jwtSecretKey") === undefined) {
+      prompts.push({
         type: "input",
         name: "jwtSecretKey",
         message: "Your JWT secret key?",
-        default: this.config.get("jwtSecretKey") || this._jwtGenKey()
-      },
-      {
+        default: this._jwtGenKey()
+      })
+    }
+    if (this.config.get("serverPort") === undefined) {
+      prompts.push({
         type: "input",
         name: "serverPort",
         message: "Your server port?",
-        default: this.config.get("serverPort") || "8080"
-      },
-      {
+        default: "8080"
+      })
+    }
+    if (this.config.get("appSecretKey") === undefined) {
+      prompts.push({
         type: "input",
         name: "appSecretKey",
         message: "Your App secret key?",
-        default: this.config.get("appSecretKey") || this._jwtGenKey()
-      }
-    ];
+        default: this._jwtGenKey()
+      })
+    }
 
     return this.prompt(prompts).then(props => {
       this.props = props;
       this.props.destinationPath = this.destinationPath();
+      if (this.config.get("appName") !== undefined) {
+        this.props.appName = this.config.get("appName");
+      }
+      if (this.config.get("appSecretKey") !== undefined) {
+        this.props.appSecretKey = this.config.get("appSecretKey");
+      }
+      if (this.config.get("jwtSecretKey") !== undefined) {
+        this.props.jwtSecretKey = this.config.get("jwtSecretKey");
+      }
+      if (this.config.get("serverPort") !== undefined) {
+        this.props.serverPort = this.config.get("serverPort");
+      }
     });
   }
 
@@ -58,15 +78,12 @@ module.exports = class extends Generator {
   //   var i,
   //     j,
   //     k = "";
-
   //   addEntropyTime();
   //   var seed = keyFromEntropy();
-
   //   var prng = new AESprng(seed);
   //   if (document.key.keytype[0].checked) {
   //     // Text key
   //     var charA = "A".charCodeAt(0);
-
   //     for (i = 0; i < 12; i++) {
   //       if (i > 0) {
   //         k += "-";
@@ -78,7 +95,6 @@ module.exports = class extends Generator {
   //   } else {
   //     // Hexadecimal key
   //     var hexDigits = "0123456789ABCDEF";
-
   //     for (i = 0; i < 64; i++) {
   //       k += hexDigits.charAt(prng.nextInt(15));
   //     }

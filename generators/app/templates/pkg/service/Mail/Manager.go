@@ -3,6 +3,8 @@ package Mail
 import (
   MailMailer "<%= appName %>/pkg/service/Mail/Mailer"
 
+  "log"
+
   "github.com/spf13/viper"
 )
 
@@ -35,6 +37,7 @@ func (m *manager) Driver(name string) Service {
 
 func (m *manager) get(name string) Service {
   if m.mailers[name] == nil {
+    log.Printf("Connecting Mailer %s", name)
     return NewService(m.resolve(name))
   }
   return m.mailers[name]
