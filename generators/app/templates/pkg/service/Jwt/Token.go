@@ -1,6 +1,8 @@
-package domain
+package Jwt
 
-import "github.com/dgrijalva/jwt-go"
+import (
+  "github.com/dgrijalva/jwt-go"
+)
 
 type Token struct {
   UserID string   `json:"userId"`

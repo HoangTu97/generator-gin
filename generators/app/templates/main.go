@@ -12,6 +12,7 @@ import (
   "<%= appName %>/config"
   "<%= appName %>/pkg/service/Cache"
   "<%= appName %>/pkg/service/Database"
+  "<%= appName %>/pkg/service/Jwt"
   "<%= appName %>/pkg/service/Mail"
   "<%= appName %>/routers"
 )
@@ -39,10 +40,9 @@ func main() {
 
   cacheManager := Cache.NewManager()
   mailManager := Mail.NewManager()
+  jwtManager := Jwt.NewManager()
 
-  jwtManager := config.SetupJWT()
-
-  controllers := config.SetupController(dbManager, jwtManager, cacheManager, mailManager)
+  controllers := config.Providers(dbManager, jwtManager, cacheManager, mailManager)
 
   gin.ForceConsoleColor()
   gin.SetMode(viper.GetString("app.runMode"))

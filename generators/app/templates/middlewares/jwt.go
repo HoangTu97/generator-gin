@@ -1,14 +1,15 @@
 package middlewares
 
 import (
-  "<%= appName %>/helpers/jwt"
+  "<%= appName %>/pkg/service/Jwt"
+
   "strings"
 
   "github.com/gin-gonic/gin"
 )
 
 // JWT is jwt middleware
-func JWT(jwtManager jwt.JwtManager) gin.HandlerFunc {
+func JWT(jwtManager Jwt.Manager) gin.HandlerFunc {
   return func(c *gin.Context) {
     token := c.Request.Header.Get("Authorization")
     if len(token) == 0 {

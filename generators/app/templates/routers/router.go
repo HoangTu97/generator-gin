@@ -2,9 +2,9 @@ package routers
 
 import (
   _ "<%= appName %>/docs"
-  "<%= appName %>/helpers/jwt"
   "<%= appName %>/middlewares"
   "<%= appName %>/controller"
+  "<%= appName %>/pkg/service/Jwt"
 
   // "github.com/gin-gonic/contrib/static"
   "github.com/gin-gonic/gin"
@@ -13,7 +13,7 @@ import (
 )
 
 // InitRouter initialize routing information
-func InitRouter(jwtManager jwt.JwtManager, controllers []controller.Base) *gin.Engine {
+func InitRouter(jwtManager Jwt.Manager, controllers []controller.Base) *gin.Engine {
   r := gin.New()
   r.Use(gin.Logger())
   r.Use(gin.Recovery())

@@ -2,12 +2,12 @@ package config
 
 import (
   "<%= appName %>/controller"
-  "<%= appName %>/helpers/jwt"
   "<%= appName %>/pkg/service/Auth"
   "<%= appName %>/pkg/service/Database"
   "<%= appName %>/pkg/service/File"
   "<%= appName %>/pkg/service/Cache"
   "<%= appName %>/pkg/service/Mail"
+  "<%= appName %>/pkg/service/Jwt"
   "<%= appName %>/pkg/service/Hash"
   // "<%= appName %>/pkg/service/Schedule"
   "<%= appName %>/repository/impl"
@@ -17,9 +17,9 @@ import (
   "<%= appName %>/service/mapper/impl"
 )
 
-func SetupController(
+func Providers(
   dbManager Database.Manager, 
-  jwtManager jwt.JwtManager,
+  jwtManager Jwt.Manager,
   cacheManager Cache.Manager,
   mailManager Mail.Manager,
 ) []controller.Base {
@@ -38,7 +38,7 @@ func SetupController(
   // Proxy Repositories declare end : dont remove
 
   // Services declare
-  cacheService := cacheManager.Driver("Memcached")
+  cacheService := cacheManager.Driver("")
   fileService := File.NewService()
   // mailService := mailManager.Mailer("smtp")
   hashService := Hash.NewService("")

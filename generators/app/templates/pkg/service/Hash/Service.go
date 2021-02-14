@@ -6,8 +6,11 @@ type Service interface {
 }
 
 func NewService(driver string) Service {
-  if driver == "bcrypt" {
+  switch driver {
+  case "bcrypt":
     return NewBcrypt()
+  case "md5":
+    return NewMd5()
   }
   return NewBcrypt()
 }
