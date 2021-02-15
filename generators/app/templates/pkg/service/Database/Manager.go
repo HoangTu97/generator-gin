@@ -38,7 +38,11 @@ func (m *manager) get(name string) *gorm.DB {
   if m.connections[name] == nil {
     log.Printf("Connecting DB %s", name)
 
-    db, _ := gorm.Open(m.resolve(name), &gorm.Config{})
+    db, err := gorm.Open(m.resolve(name), &gorm.Config{})
+    if err != nil {
+      log.Fatalln("DB connection error : name:", name, " err:", err)
+    }
+
     switch name {
     case "postgres": {
       sqlDB, err := db.DB()
@@ -59,14 +63,14 @@ func (m *manager) get(name string) *gorm.DB {
 func (m *manager) resolve(name string) gorm.Dialector {
   switch name {
   case "sqlite3":
-    return sqlite.Open(viper.GetString("db.driver.sqlite3.path"))
+    return sqlite.Open(viper.GetString("db.drivers.sqlite3.path"))
   case "postgres":
     return postgres.New(postgres.Config{
       DSN: fmt.Sprintf("host=%s user=%s password=%s dbname=%s ",
-        viper.GetString("db.driver.pgsql.host"),
-        viper.GetString("db.driver.pgsql.username"),
-        viper.GetString("db.driver.pgsql.password"),
-        viper.GetString("db.driver.pgsql.database"),
+        viper.GetString("db.drivers.pgsql.host"),
+        viper.GetString("db.drivers.pgsql.username"),
+        viper.GetString("db.drivers.pgsql.password"),
+        viper.GetString("db.drivers.pgsql.database"),
       ),
     })
   }
