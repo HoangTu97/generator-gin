@@ -11,11 +11,35 @@
     "pageSize": 10
   },
   "log": {
-    "runtimeRootPath": "runtime/",
-    "savePath": "logs/",
-    "saveName": "log",
-    "fileExt": "log",
-    "timeFormat": "20060102"
+    "default": "stack",
+    "level": {
+      "ROOT": "DEBUG"
+    },
+    "callerDepth": 3,
+    "drivers": {
+      "stack": {
+        "channels": [
+          "file", "system"
+        ]
+      },
+      "file": {
+        "runtimeRootPath": "runtime/",
+        "savePath": "logs/",
+        "saveName": "log",
+        "ext": "log",
+        "timeFormat": "20060102"
+      },
+      "slack": {
+        "url": "LOG_SLACK_WEBHOOK_URL",
+        "username": "Laravel Log",
+        "emoji": ":boom:"
+      },
+      "system": {},
+      "database": {
+        "table": "logs"
+      },
+      "null": {}
+    }
   },
   "db": {
     "default": "sqlite3",
@@ -59,14 +83,10 @@
         "username": "",
         "password": ""
       },
-      "mailgun": {
-      },
-      "postmark": {
-      },
-      "sendgrid": {
-      },
-      "ses": {
-      }
+      "mailgun": {},
+      "postmark": {},
+      "sendgrid": {},
+      "ses": {}
     }
   },
   "sms": {
@@ -81,8 +101,7 @@
   "hash": {
     "default": "bcrypt",
     "drivers": {
-      "bcrypt": {
-      }
+      "bcrypt": {}
     }
   },
   "fcm": {

@@ -1,9 +1,9 @@
 package Mail
 
 import (
+  "<%= appName %>/pkg/service/Log/Logger"
   MailMailer "<%= appName %>/pkg/service/Mail/Mailer"
 
-  "log"
 
   "github.com/spf13/viper"
 )
@@ -15,11 +15,13 @@ type Manager interface {
 
 type manager struct {
   mailers map[string]Service
+  logger Logger.Logger
 }
 
-func NewManager() Manager {
+func NewManager(logger Logger.Logger) Manager {
   return &manager{
     mailers: make(map[string]Service),
+    logger: logger,
   }
 }
 
@@ -37,7 +39,7 @@ func (m *manager) Driver(name string) Service {
 
 func (m *manager) get(name string) Service {
   if m.mailers[name] == nil {
-    log.Printf("Connecting Mailer %s", name)
+    m.logger.Info("Connecting Mailer ", name)
     return NewService(m.resolve(name))
   }
   return m.mailers[name]

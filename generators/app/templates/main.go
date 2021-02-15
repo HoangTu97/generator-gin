@@ -3,7 +3,6 @@ package main
 import (
   "time"
   "fmt"
-  "log"
   "net/http"
 
   "github.com/spf13/viper"
@@ -14,6 +13,7 @@ import (
   "<%= appName %>/pkg/service/Database"
   "<%= appName %>/pkg/service/Jwt"
   "<%= appName %>/pkg/service/Mail"
+  "<%= appName %>/pkg/service/Log"
   "<%= appName %>/routers"
 )
 
@@ -38,11 +38,13 @@ func main() {
   dbManager.Connection("")
   dbManager.Migrate("", models)
 
-  cacheManager := Cache.NewManager()
-  mailManager := Mail.NewManager()
+  logManager := Log.NewManager()
+  logger := logManager.Driver("")
+  cacheManager := Cache.NewManager(logger)
+  mailManager := Mail.NewManager(logger)
   jwtManager := Jwt.NewManager()
 
-  controllers := config.Providers(dbManager, jwtManager, cacheManager, mailManager)
+  controllers := config.Providers(dbManager, jwtManager, cacheManager, mailManager, logManager)
 
   gin.ForceConsoleColor()
   gin.SetMode(viper.GetString("app.runMode"))
@@ -62,7 +64,7 @@ func main() {
     MaxHeaderBytes: maxHeaderBytes,
   }
 
-  log.Printf("[info] start http server listening %s", endPoint)
+  logger.Info("Start http server listening ", endPoint)
 
   if viper.GetBool("app.SSL") {
     SSLKeys := &struct {
@@ -76,12 +78,12 @@ func main() {
 
     err := server.ListenAndServeTLS(SSLKeys.CERT, SSLKeys.KEY)
     if err != nil {
-      log.Fatal("Web server (HTTPS): ", err)
+      logger.Fatal("Web server (HTTPS): ", err)
     }
   } else {
     err := server.ListenAndServe()
     if err != nil {
-      log.Fatal("Web server (HTTP): ", err)
+      logger.Fatal("Web server (HTTP): ", err)
     }
   }
 

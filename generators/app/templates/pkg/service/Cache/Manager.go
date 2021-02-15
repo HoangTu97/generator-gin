@@ -1,11 +1,11 @@
 package Cache
 
 import (
+  "<%= appName %>/pkg/service/Log/Logger"
   "<%= appName %>/pkg/service/Cache/Store"
 
   "time"
   "fmt"
-  "log"
 
   "github.com/spf13/viper"
 )
@@ -18,11 +18,13 @@ type Manager interface {
 
 type manager struct {
   stores map[string]Service
+  logger Logger.Logger
 }
 
-func NewManager() Manager {
+func NewManager(logger Logger.Logger) Manager {
   return &manager{
     stores: make(map[string]Service),
+    logger: logger,
   }
 }
 
@@ -40,7 +42,7 @@ func (m *manager) Driver(name string) Service {
 
 func (m *manager) get(name string) Service {
   if m.stores[name] == nil {
-    log.Printf("Connecting Cache %s", name)
+    m.logger.Info("Connecting Cache ", name)
     return NewService(m.resolve(name))
   }
   return m.stores[name]

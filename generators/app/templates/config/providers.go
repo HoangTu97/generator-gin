@@ -7,6 +7,7 @@ import (
   "<%= appName %>/pkg/service/File"
   "<%= appName %>/pkg/service/Cache"
   "<%= appName %>/pkg/service/Mail"
+  "<%= appName %>/pkg/service/Log"
   "<%= appName %>/pkg/service/Jwt"
   "<%= appName %>/pkg/service/Hash"
   // "<%= appName %>/pkg/service/Schedule"
@@ -22,6 +23,7 @@ func Providers(
   jwtManager Jwt.Manager,
   cacheManager Cache.Manager,
   mailManager Mail.Manager,
+  logManager Log.Manager,
 ) []controller.Base {
   db := dbManager.Connection("")
 
