@@ -5,11 +5,13 @@ import (
 
   "fmt"
   "log"
+  "os"
   "time"
 )
 
 type file struct {
   logger      *log.Logger
+  f           *os.File
   callerDepth int
 }
 
@@ -23,7 +25,7 @@ func NewFile(runtimeRootPath, savePath, saveName, timeFormat, fileExt string, ca
 
   logger := log.New(f, "", log.LstdFlags)
 
-  return &file{logger: logger, callerDepth: callerDepth}
+  return &file{logger: logger, callerDepth: callerDepth, f: f}
 }
 
 func (l *file) Debug(v ...interface{}) {
@@ -44,4 +46,8 @@ func (l *file) Error(v ...interface{}) {
 
 func (l *file) Fatal(v ...interface{}) {
   l.logger.Fatalln(append([]interface{}{getPrefix(FATAL, l.callerDepth)}, v...)...)
+}
+
+func (l *file) Close() {
+  l.f.Close()
 }

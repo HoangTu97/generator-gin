@@ -37,9 +37,9 @@ func getPrefix(level Level, callerDepth int) string {
   var logPrefix string
   t := time.Now()
   if ok {
-    logPrefix = fmt.Sprintf("%s [%s][%s:%d]", t.Format(time.RFC1123), levelFlags[level], filepath.Base(f), line)
+    logPrefix = fmt.Sprintf("[%d] [%s][%s:%d]", t.Unix(), levelFlags[level], filepath.Base(f), line)
   } else {
-    logPrefix = fmt.Sprintf("%s [%s]", t.Format(time.RFC1123), levelFlags[level])
+    logPrefix = fmt.Sprintf("[%d] [%s]", t.Unix(), levelFlags[level])
   }
   return logPrefix
 }

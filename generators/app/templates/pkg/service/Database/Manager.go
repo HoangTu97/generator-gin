@@ -91,7 +91,7 @@ func (m *manager) Migrate(name string, entities []interface{}) {
 
 func (m *manager) Shutdown() {
   for key, connection := range m.connections {
-    log.Printf("Disconnecting DB connection : %s \n", key)
+    log.Printf("Closing DB connection : %s \n", key)
     sqlDB, _ := connection.DB()
     sqlDB.Close()
   }
