@@ -35,7 +35,7 @@ func NewManager() Manager {
 // GenerateToken generate tokens used for auth
 func (m *manager) GenerateToken(userID string, username string, roles []string) (string, error) {
   nowTime := time.Now()
-  expireTime := nowTime.Add(m.expireTime * time.Second)
+  expireTime := nowTime.Add(time.Duration(m.expireTime) * time.Second)
 
   claims := Token{
     UserID: userID,

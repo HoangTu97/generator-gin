@@ -40,6 +40,6 @@ func (l *stack) Fatal(v ...interface{}) {
 
 func (l *stack) Close() {
   for _, channel := range l.channels {
-    channel.Close()
+    (channel.(Closeable)).Close()
   }
 }
