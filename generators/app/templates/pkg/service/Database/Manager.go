@@ -86,6 +86,10 @@ func (m *manager) Migrate(name string, entities []interface{}) {
     name = m.getDefault()
   }
 
+  if m.connections[name] == nil {
+    m.Connection(name)
+  }
+
   switch name {
   case "sqlite3", "postgres":
     db := m.connections[name]

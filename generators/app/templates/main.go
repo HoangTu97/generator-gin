@@ -39,7 +39,6 @@ func main() {
 
   dbManager := Database.NewManager()
   models := config.GetModelsNeedMigrate()
-  dbManager.Connection("")
   dbManager.Migrate("", models)
 
   logManager := Log.NewManager()
