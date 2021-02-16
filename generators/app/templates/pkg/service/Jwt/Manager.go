@@ -26,8 +26,8 @@ func NewManager() Manager {
   return &manager{
     jwtSecret:   []byte(viper.GetString("app.jwtSecretKey")),
     expireTime:  3 * 3600,
-    issuer:      "gin-<%= appName %>",
-    audience:    "",
+    issuer:      "<%= appName %>.gin.com",
+    audience:    "<%= appName %>.gin.com",
     hashService: Hash.NewService("md5"),
   }
 }
@@ -44,7 +44,7 @@ func (m *manager) GenerateToken(userID string, username string, roles []string) 
     StandardClaims: &jwt.StandardClaims{
       ExpiresAt: expireTime.Unix(),
       Issuer:    m.issuer,
-      Audience:  m.
+      Audience:  m.audience,
     },
   }
 
