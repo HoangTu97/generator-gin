@@ -143,7 +143,7 @@ module.exports = class extends Generator {
   }
 
   _registerController(entityVar, entityClass, useRepoProxy, useServiceProxy) {
-    var path = this.destinationPath(`config/controller.go`);
+    var path = this.destinationPath(`config/providers.go`);
     var file = this.fs.read(path);
 
     var mapperDeclare = `${entityVar}Mapper := mapper_impl.New${entityClass}()`;
