@@ -45,24 +45,25 @@ func (m *manager) getDefaultDriver() string {
 func (m *manager) get(name string) Logger.Logger {
   if m.drivers[name] == nil {
     log.Printf("Initializing Logger %s", name)
-    return m.resolve(name)
+    return m.resolve(name, m.callerDepth)
   }
   return m.drivers[name]
 }
 
-func (m *manager) resolve(name string) Logger.Logger {
+func (m *manager) resolve(name string, calldepth int) Logger.Logger {
   switch name {
   case "null":
     return Logger.NewNull()
   case "stack":
+    calldepth = calldepth + 1
     strChannels := viper.GetStringSlice("log.drivers.stack.channels")
     channels := make([]Logger.Logger, len(strChannels))
     for i, chName := range strChannels {
-      channels[i] = m.Driver(chName)
+      channels[i] = m.resolve(chName, calldepth + 1)
     }
     return Logger.NewStack(channels)
   case "system":
-    return Logger.NewSystem(m.callerDepth)
+    return Logger.NewSystem(calldepth)
   case "file":
     return Logger.NewFile(
       viper.GetString("log.drivers.file.runtimeRootPath"),
@@ -70,7 +71,7 @@ func (m *manager) resolve(name string) Logger.Logger {
       viper.GetString("log.drivers.file.saveName"),
       viper.GetString("log.drivers.file.timeFormat"),
       viper.GetString("log.drivers.file.ext"),
-      m.callerDepth,
+      calldepth,
     )
   }
   return Logger.NewNull()

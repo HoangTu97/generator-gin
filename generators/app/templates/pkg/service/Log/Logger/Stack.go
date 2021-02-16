@@ -38,4 +38,8 @@ func (l *stack) Fatal(v ...interface{}) {
   }
 }
 
-func (l *stack) Close() {}
+func (l *stack) Close() {
+  for _, channel := range l.channels {
+    channel.Close()
+  }
+}

@@ -15,7 +15,7 @@
     "level": {
       "ROOT": "DEBUG"
     },
-    "callerDepth": 3,
+    "callerDepth": 2,
     "drivers": {
       "stack": {
         "channels": [

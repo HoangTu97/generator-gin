@@ -16,12 +16,18 @@ type Manager interface {
 
 type manager struct {
   jwtSecret   []byte
+  expireTime  int
+  issuer      string
+  audience    string
   hashService Hash.Service
 }
 
 func NewManager() Manager {
   return &manager{
     jwtSecret:   []byte(viper.GetString("app.jwtSecretKey")),
+    expireTime:  3 * 3600,
+    issuer:      "gin-<%= appName %>",
+    audience:    "",
     hashService: Hash.NewService("md5"),
   }
 }
@@ -29,7 +35,7 @@ func NewManager() Manager {
 // GenerateToken generate tokens used for auth
 func (m *manager) GenerateToken(userID string, username string, roles []string) (string, error) {
   nowTime := time.Now()
-  expireTime := nowTime.Add(3 * time.Hour)
+  expireTime := nowTime.Add(m.expireTime * time.Second)
 
   claims := Token{
     UserID: userID,
@@ -37,7 +43,8 @@ func (m *manager) GenerateToken(userID string, username string, roles []string) 
     Roles:  roles,
     StandardClaims: &jwt.StandardClaims{
       ExpiresAt: expireTime.Unix(),
-      Issuer:    "gin-blog",
+      Issuer:    m.issuer,
+      Audience:  m.
     },
   }
 
