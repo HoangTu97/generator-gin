@@ -7,8 +7,13 @@
     "readTimeout": 60,
     "writeTimeout": 60,
     "SSL": false,
-    "jwtSecretKey": "<%= jwtSecretKey %>",
     "pageSize": 10
+  },
+  "auth": {
+    "jwtSecretKey": "<%= jwtSecretKey %>",
+    "expireTime": 10800,
+    "issuer": "<%= appName %>.gin.com",
+    "audience": "<%= appName %>"
   },
   "log": {
     "default": "stack",

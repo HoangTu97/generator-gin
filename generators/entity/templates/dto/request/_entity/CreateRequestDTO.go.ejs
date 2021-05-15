@@ -1,6 +1,0 @@
-package <%= entityClass %>Request
-
-type CreateRequestDTO struct {
-<% fields.forEach(function(field){ %>
-  <%= field.name %> <%= field.type %> <% if (field.jsonConfig !== '') {%>`<%- field.jsonConfig %>`<%}%><% }); %>
-}
