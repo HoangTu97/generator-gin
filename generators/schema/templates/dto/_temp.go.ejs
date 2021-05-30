@@ -13,4 +13,19 @@ type <%= entityClass %>DTO struct {
   DeletedAt gorm.DeletedAt `json:"deleted_at,omitempty"`
 <% fields.forEach(function(field){ %>
   <%= field.name %> <%= field.type %> <% if (field.jsonConfig !== '') {%>`<%- field.jsonConfig %>`<%}%><% }); %>
+<% if (relationships !== undefined) { %>
+  // Auto-gen relationships<% for (const [to, config] of Object.entries(relationships))
+  {
+    var texxt = "";
+    var name = config['name'];
+    var nameSnake = config['nameSnake'];
+    switch (config.type) {
+      case 'belongsTo':
+        texxt = `\n  ${name}ID uint \`json:"${nameSnake},omitempty"\``;
+        break;
+    }
+    %><%- texxt %><%
+  } %>
+  // Auto-gen relationships : dont remove<%
+} %>
 }

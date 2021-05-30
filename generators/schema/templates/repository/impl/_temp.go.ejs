@@ -1,0 +1,62 @@
+package repository_impl
+
+import (
+  "<%= appName %>/helpers/page"
+  "<%= appName %>/helpers/pagination"
+  "<%= appName %>/models"
+  "<%= appName %>/repository"
+
+  "gorm.io/gorm"
+)
+
+type <%= entityVar %> struct {
+  db *gorm.DB
+}
+
+func New<%= entityClass %>(db *gorm.DB) repository.<%= entityClass %> {
+  return &<%= entityVar %>{db: db}
+}
+
+func (r *<%= entityVar %>) Save(<%= entityVar %> models.<%= entityClass %>) (models.<%= entityClass %>, error) {
+  result := r.db.Save(&<%= entityVar %>)
+  if result.Error != nil {
+    return <%= entityVar %>, result.Error
+  }
+  return <%= entityVar %>, nil
+}
+
+func (r *<%= entityVar %>) FindOne(id uint) (models.<%= entityClass %>, error) {
+  var <%= entityVar %> models.<%= entityClass %>
+
+  result := r.db.First(&<%= entityVar %>, id)
+  if result.Error != nil {
+    return models.<%= entityClass %>{}, result.Error
+  }
+
+  return <%= entityVar %>, nil
+}
+
+func (r *<%= entityVar %>) FindPage(pageable pagination.Pageable) page.Page {
+  var <%= entityVar %>s []models.<%= entityClass %>
+
+  paginator := pagination.Paging(&pagination.Param{
+    DB:      r.db.Joins("User").Joins("Recipe"),
+    Page:    pageable.GetPageNumber(),
+    Limit:   pageable.GetPageSize(),
+    ShowSQL: true,
+  }, &<%= entityVar %>s)
+
+  return page.From(r.toInterfacesFrom<%= entityClass %>(<%= entityVar %>s), paginator.TotalRecord)
+}
+
+func (r *<%= entityVar %>) toInterfacesFrom<%= entityClass %>(<%= entityVar %>s []models.<%= entityClass %>) []interface{} {
+  content := make([]interface{}, len(<%= entityVar %>s))
+  for i, v := range <%= entityVar %>s {
+    content[i] = v
+  }
+  return content
+}
+
+func (r *<%= entityVar %>) Delete(id uint) {
+  r.db.Delete(&models.<%= entityClass %>{}, id)
+}

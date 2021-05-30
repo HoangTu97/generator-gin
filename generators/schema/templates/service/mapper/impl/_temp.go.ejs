@@ -1,0 +1,84 @@
+package mapper_impl
+
+import (
+  "<%= appName %>/dto"
+  "<%= appName %>/models"
+  "<%= appName %>/service/mapper"
+  "gorm.io/gorm"
+)
+
+type <%= entityVar %> struct {}
+
+func New<%= entityClass %>() mapper.<%= entityClass %> {
+  return &<%= entityVar %>{}
+}
+
+func (m *<%= entityVar %>) ToDTO(entity models.<%= entityClass %>) dto.<%= entityClass %>DTO {
+  return dto.<%= entityClass %>DTO{
+    ID:        entity.Model.ID,
+    CreatedAt: entity.Model.CreatedAt,
+    UpdatedAt: entity.Model.UpdatedAt,
+    DeletedAt: entity.Model.DeletedAt,
+<% fields.forEach(function(field){ %>
+    <%= field.name %>: entity.<%= field.name %>,<% }); %>
+<% if (relationships !== undefined) {
+  for (const [to, config] of Object.entries(relationships))
+  {
+    var texxt = "";
+    var name = config['name'];
+    switch (config.type) {
+      case 'belongsTo':
+        texxt = `\n    ${name}ID: entity.${name}ID,`;
+        break;
+    }
+    %><%- texxt %><%
+  }
+} %>
+  }
+}
+
+func (m *<%= entityVar %>) ToEntity(dto dto.<%= entityClass %>DTO) models.<%= entityClass %> {
+  return models.<%= entityClass %>{
+    Model: gorm.Model{
+      ID:        dto.ID,
+      CreatedAt: dto.CreatedAt,
+      UpdatedAt: dto.UpdatedAt,
+      DeletedAt: dto.DeletedAt,
+    },
+<% fields.forEach(function(field){ %>
+    <%= field.name %>: dto.<%= field.name %>,<% }); %>
+<% if (relationships !== undefined) {
+  for (const [to, config] of Object.entries(relationships))
+  {
+    var texxt = "";
+    var name = config['name'];
+    switch (config.type) {
+      case 'belongsTo':
+        texxt = `\n    ${name}ID: dto.${name}ID,`;
+        break;
+    }
+    %><%- texxt %><%
+  }
+} %>
+  }
+}
+
+func (m *<%= entityVar %>) ToDTOS(entityList []models.<%= entityClass %>) []dto.<%= entityClass %>DTO {
+  dtos := make([]dto.<%= entityClass %>DTO, len(entityList))
+
+  for i, entity := range entityList {
+    dtos[i] = m.ToDTO(entity)
+  }
+
+  return dtos
+}
+
+func (m *<%= entityVar %>) ToEntities(dtoList []dto.<%= entityClass %>DTO) []models.<%= entityClass %> {
+  entities := make([]models.<%= entityClass %>, len(dtoList))
+
+  for i, dto := range dtoList {
+    entities[i] = m.ToEntity(dto)
+  }
+
+  return entities
+}

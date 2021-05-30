@@ -14,21 +14,17 @@ type <%= entityClass %> struct {
 <% if (relationships !== undefined) { %>
   // Auto-gen relationships<% for (const [to, config] of Object.entries(relationships)) 
   {
-    var texxt;
+    var texxt = "";
     switch (config.type) {
       case 'belongsTo':
-        texxt = `
-  ${to}ID uint
-  ${to} ${to}`;
+        texxt = `\n  ${to}ID uint\n  ${to} ${to}`;
         break;
       case 'hasMany':
-        texxt = `
-  ${to}s []${to}`;
+        texxt = `\n  ${to}s []${to}`;
         break;
       case 'manyToMany':
-        texxt = `
-  ${to}s []${to} \`gorm:"many2many:${config.joinTable};"\``;
-          break;
+        texxt = `\n  ${to}s []${to} \`gorm:"many2many:${config.joinTable};"\``;
+        break;
     } 
     %><%- texxt %><%
   } %>

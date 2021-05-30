@@ -1,0 +1,33 @@
+package repository_proxy
+
+import (
+  "<%= appName %>/helpers/page"
+  "<%= appName %>/helpers/pagination"
+  "<%= appName %>/models"
+  "<%= appName %>/repository"
+)
+
+// <%= entityVar %> use for transaction,...
+type <%= entityVar %> struct {
+  repository repository.<%= entityClass %>
+}
+
+func New<%= entityClass %>(repository repository.<%= entityClass %>) repository.<%= entityClass %> {
+  return &<%= entityVar %>{repository: repository}
+}
+
+func (r *<%= entityVar %>) Save(<%= entityVar %> models.<%= entityClass %>) (models.<%= entityClass %>, error) {
+  return r.repository.Save(<%= entityVar %>)
+}
+
+func (r *<%= entityVar %>) FindOne(id uint) (models.<%= entityClass %>, error) {
+  return r.repository.FindOne(id)
+}
+
+func (r *<%= entityVar %>) FindPage(pageable pagination.Pageable) page.Page {
+  return r.repository.FindPage(pageable)
+}
+
+func (r *<%= entityVar %>) Delete(id uint) {
+  r.repository.Delete(id)
+}

@@ -19,7 +19,7 @@ import (
 )
 
 func Providers(
-  dbManager Database.Manager, 
+  dbManager Database.Manager,
   jwtManager Jwt.Manager,
   cacheManager Cache.Manager,
   mailManager Mail.Manager,
